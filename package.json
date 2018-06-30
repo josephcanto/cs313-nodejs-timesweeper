@@ -1,0 +1,23 @@
+{
+  "name": "cs313-nodejs-timesweeper",
+  "version": "1.0.0",
+  "description": "NodeJS Project for CS313",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josephcanto/cs313-nodejs-timesweeper.git"
+  },
+  "author": "Joseph Canto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/josephcanto/cs313-nodejs-timesweeper/issues"
+  },
+  "homepage": "https://github.com/josephcanto/cs313-nodejs-timesweeper#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "pg": "^7.4.3"
+  }
+}
