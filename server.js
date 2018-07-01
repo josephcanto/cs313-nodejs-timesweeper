@@ -65,15 +65,16 @@ function getTimers(request, response) {
     var id = parseInt(request.params.user_id);
     var sql = "SELECT * FROM timers WHERE user_id = $1::int";
     var params = [id];
-    console.log("Getting list of timers for user with id: " + id + "...");
+    res.json({id: id, sql: sql, params: params});
+    // console.log("Getting list of timers for user with id: " + id + "...");
 
-    pool.query(sql, params, (error, result) => {
-        if(error || result == null || result.length != 1) {
-            response.status(500).json({success: false, data: error});
-        } else {
-            response.status(200).json(result);
-        }
-    });
+    // pool.query(sql, params, (error, result) => {
+    //     if(error || result == null || result.length != 1) {
+    //         response.status(500).json({success: false, data: error});
+    //     } else {
+    //         response.status(200).json(result);
+    //     }
+    // });
 }
 
 function getTimerInfo(req, res) {
