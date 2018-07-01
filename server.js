@@ -6,6 +6,8 @@ const connectionString = process.env.DATABASE_URL || "psql postgres://postgres:c
 const pool = new Pool({connectionString: connectionString, ssl: true});
 
 app.set('port', (process.env.PORT || 5000));
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 
 // Default route
 app.get('/', (req, res) => res.send('<h1>Timesweeper App coming soon!</h1>'));
@@ -59,27 +61,19 @@ function createTimer(req, res) {
     console.log("Creating new timer...");
 }
 
-function getTimers(req, res) {
-    console.log('Getting list of timers...');
+function getTimers(request, response) {
+    var id = request.params.id;
+    var sql = "SELECT label, 'start', 'current' FROM timers WHERE user_id = $1::int";
+    var params = [id];
+    console.log("Getting list of timers for user with id: " + id + "...");
 
-    try {
-        const client = await pool.connect();
-        const result = await client.query('SELECT * FROM timers');
-        res.json(result);
-        client.release();
-    } catch(err) {
-        console.error(err);
-        res.send('Error', err);
-    }
-    // var result = {
-    //     id: 1, 
-    //     label: "CS313", 
-    //     start: "00:00:00", 
-    //     current: "00:50:37", 
-    //     user_id: req.params.user_id
-    // };
-    console.log("User ID is", result.user_id);
-    res.json(result);
+    pool.query(sql, params, (error, result) => {
+        if(error || result == null || result.length != 1) {
+            response.status(500).json({success: false, data: error});
+        } else {
+            response.status(200).json(result);
+        }
+    });
 }
 
 function getTimerInfo(req, res) {
