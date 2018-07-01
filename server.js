@@ -121,10 +121,36 @@ function getTimersFromDb(user_id, callback) {
     });
 }
 
-function getTimerInfo(req, res) {
-    var id = req.params.id;
-    console.log("Retrieving info for timer with id " + id + "...");
-    res.json({label: 'CS 313', start: '00:00:00', current: '00:37:18', user_id: 2});
+function getTimerInfo(request, response) {
+    if(request.params.id != null) {
+        var id = request.params.id;
+        getTimerInfoFromDb(id, (error, result) => {
+            if(error || result == null || result.length < 1) {
+                response.status(500).json({success: false, data: error});
+            } else {
+                response.status(200).json(result);
+            }
+        });
+    }
+}
+
+function getTimerInfoFromDb(id, callback) {
+    console.log("Getting info from DB for timer with id " + id + "...");
+
+    var sql = 'SELECT label, "start", "current" FROM timers WHERE id = $1::int';
+    var params = [id];
+    
+    pool.query(sql, params, (err, result) => {
+        if(err) {
+            console.log("Error in query: ");
+            console.log(err);
+            callback(err, null);
+        }
+
+        console.log("Found result: " + JSON.stringify(result.rows));
+
+        callback(null, result.rows);
+    });
 }
 
 function editTimerInfo(req, res) {
