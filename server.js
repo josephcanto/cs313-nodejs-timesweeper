@@ -105,7 +105,7 @@ function getTimers(request, response) {
 function getTimersFromDb(user_id, callback) {
     console.log("Getting timers from DB for user with id " + user_id + "...");
 
-    var sql = "SELECT label, 'start', 'current' FROM timers WHERE user_id = $1::int";
+    var sql = 'SELECT label, "start", "current" FROM timers WHERE user_id = $1::int';
     var params = [user_id];
     
     pool.query(sql, params, (err, result) => {
