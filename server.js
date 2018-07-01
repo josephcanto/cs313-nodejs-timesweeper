@@ -43,10 +43,36 @@ function registerUser(req, res) {
     res.json({success: true});
 }
 
-function getUserInfo(req, res) {
-    var id = req.params.id;
-    console.log("Retrieving info for user with id: " + id + "...");
-    res.json({username: 'webstudent', theme: 'green'});
+function getUserInfo(request, response) {
+    if(request.params.id != null) {
+        var id = request.params.id;
+        getUserInfoFromDb(id, (error, result) => {
+            if(error || result == null || result.length < 1) {
+                response.status(500).json({success: false, data: error});
+            } else {
+                response.status(200).json(result);
+            }
+        });
+    }
+}
+
+function getUserInfoFromDb(id, callback) {
+    console.log("Getting info from DB for user with id " + id + "...");
+
+    var sql = 'SELECT username, "password", theme FROM users WHERE id = $1::int';
+    var params = [id];
+    
+    pool.query(sql, params, (err, result) => {
+        if(err) {
+            console.log("Error in query: ");
+            console.log(err);
+            callback(err, null);
+        }
+
+        console.log("Found result: " + JSON.stringify(result.rows));
+
+        callback(null, result.rows);
+    });
 }
 
 function editUserInfo(req, res) {
