@@ -65,7 +65,7 @@ function getTimers(request, response) {
     var id = parseInt(request.params.user_id);
     var sql = "SELECT * FROM timers WHERE user_id = $1::int";
     var params = [id];
-    res.json({id: id, sql: sql, params: params});
+    response.json({id: id, sql: sql, params: params});
     // console.log("Getting list of timers for user with id: " + id + "...");
 
     // pool.query(sql, params, (error, result) => {
