@@ -93,7 +93,7 @@ function getTimers(request, response) {
     if(request.params.user_id != null) {
         var user_id = request.params.user_id;
         getTimersFromDb(user_id, (error, result) => {
-            if(error || result == null || result.length != 1) {
+            if(error || result == null || result.length < 1) {
                 response.status(500).json({success: false, data: error});
             } else {
                 response.status(200).json(result);
