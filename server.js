@@ -62,8 +62,8 @@ function createTimer(req, res) {
 }
 
 function getTimers(request, response) {
-    var id = request.params.user_id;
-    var sql = "SELECT label, 'start', 'current' FROM timers WHERE user_id = $1::int";
+    var id = parseInt(request.params.user_id);
+    var sql = "SELECT * FROM timers WHERE user_id = $1::int";
     var params = [id];
     console.log("Getting list of timers for user with id: " + id + "...");
 
