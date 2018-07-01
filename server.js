@@ -11,11 +11,11 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 // Default route
-app.get('/', (req, res) => res.send('<h1>Timesweeper App coming soon!</h1>'));
+app.get('/', (req, res) => res.send('<h1>Timesweeper App coming soon!</h1>')); // working
 
 // User routes
 app.post('/register', registerUser);
-app.get('/user/:id', getUserInfo);
+app.get('/user/:id', getUserInfo); // working + able to retrieve info from DB
 app.put('/user/:id', editUserInfo);
 app.delete('/user/:id', deleteUser);
 app.post('/login', userLogin);
@@ -23,8 +23,8 @@ app.post('/logout', userLogout);
 
 // Timer routes
 app.post('/timer', createTimer);
-app.get('/timers/:user_id', getTimers);
-app.get('/timer/:id', getTimerInfo);
+app.get('/timers/:user_id', getTimers); // working + able to retrieve info from DB
+app.get('/timer/:id', getTimerInfo); // working + able to retrieve info from DB
 app.put('/timer/:id', editTimerInfo);
 app.delete('/timer/:id', deleteTimer);
 
