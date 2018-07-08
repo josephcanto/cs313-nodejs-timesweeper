@@ -1,0 +1,154 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    color: white;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    height: 100%;
+    margin: 0;
+    min-height: 100%;
+    padding: 0;
+    width: 100%;
+}
+
+body {
+    background-color: lightskyblue;
+    margin: auto;
+    min-height: 100%;
+    width: 350px;
+    overflow-y: scroll;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 10px 5px 5px 5px;
+}
+
+#app-title {
+    margin: 0;
+    padding: 0;
+}
+
+a:link {
+    color: black;
+}
+
+a:visited {
+    color: gray;
+}
+
+a:hover {
+    color: white;
+}
+
+a:active {
+    color: aliceblue;
+}
+
+/* User pages */
+#login-page {
+    display: block;
+}
+
+#registration-page {
+    display: none;
+}
+
+#edit-user-page {
+    display: none;
+}
+
+#settings-page {
+    display: none;
+}
+
+#login-page form,
+#registration-page form {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    margin-top: 35%;
+}
+
+#login-page form input,
+#registration-page form input {
+    display: block;
+    margin: 10px;
+    width: 75%;
+    padding: 5px;
+}
+
+#reg-theme {
+    height: 40px;
+}
+
+#login-page form button,
+#registration-page form button {
+    display: block;
+    margin: 10px;
+    width: 75%;
+    height: 40px;
+    transition: 500ms;
+    font-size: 1.25em;
+    cursor: pointer;
+}
+
+#login-page form button:focus,
+#registration-page form button:focus {
+    outline: none;
+}
+
+#login-page form button:hover,
+#registration-page form button:hover {
+    background-color: lightskyblue;
+    border: 2px solid white;
+    color: white;
+}
+/* End user pages */
+
+/* Timer pages */
+#dashboard-page {
+    display: none;
+}
+
+#create-timer-page {
+    display: none;
+}
+
+#edit-timer-page {
+    display: none;
+}
+
+#delete-timer-page {
+    display: none;
+}
+/* End timer pages */
+
+.timer {
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    height: 50px;
+}
+
+button {
+    background-color: white;
+    color: lightskyblue;
+    border: none;
+    padding: 5px 15px;
+    margin: 15px;
+}
+
+.active-timer {
+    background-color: white;
+    color: black;
+}
+
+.paused-buttons {
+    background-color: lightskyblue;
+    color: white;
+}
