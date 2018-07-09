@@ -32,6 +32,7 @@ header {
 #edit-mode-link {
     display: none;
     align-items: center;
+    cursor: pointer;
 }
 
 #app-title {
@@ -42,6 +43,7 @@ header {
 #add-new-link {
     display: none;
     font-size: 1.65em;
+    cursor: pointer;
 }
 
 a:link {
