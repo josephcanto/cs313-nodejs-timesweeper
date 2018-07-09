@@ -76,72 +76,76 @@ function showDashboard() {
 function buildTimerList(response) {
     var timerList = document.getElementById('timer-list');
     timerList.style.display = 'block';
-    timerList.innerText = '';
-    // if(!response) {
-    //     console.log("No timers were found for this user.");
-    //     return;
-    // }
-    // console.log(response);
 
-    var timer, 
-        timerLabels, 
-        label, 
-        currentTime, 
-        startButton, 
-        pausedButtons,
-        resetButton,
-        resumeButton;
+    if(!response) {
+        console.log("No timers were found for this user.");
+        return;
+    } else {
+        console.log(response);
 
-    // Hard-coded test data
-    response = {
-        success:true,
-        data: [
-            {
-                label: 'CIT 365', 
-                currentTime: '00:00:00'
-            },
-            {
-                label: 'CS 313', 
-                currentTime: '00:48:53'
-            },
-            {
-                label: 'FDREL 250', 
-                currentTime: '00:00:00'
-            }
-        ]
-    };
-
-    for(var i = 0; i < response.data.length; i++) {
-        timer = document.createElement('div');
-        timer.setAttribute('class', 'timer');
-
-        timerLabels = document.createElement('div');
-        timerLabels.setAttribute('class', 'timer-labels');
-        label = document.createElement('span');
-        label.setAttribute('class', 'label');
-        currentTime = document.createElement('span');
-        currentTime.setAttribute('class', 'time');
-
-        startButton = document.createElement('button');
-        startButton.setAttribute('class', 'start-button');
-        startButton.innerText = 'Start';
-
-        pausedButtons = document.createElement('div');
-        pausedButtons.setAttribute('class', 'paused-buttons');
-        resetButton = document.createElement('button');
-        resetButton.innerText = 'Reset';
-        resumeButton = document.createElement('button');
-        resumeButton.innerText = 'Resume';
-        pausedButtons.appendChild(resetButton);
-        pausedButtons.appendChild(resumeButton);
-
-        label.innerHTML = response.data[i].label;
-        currentTime.innerHTML = response.data[i].currentTime;
-        timerLabels.appendChild(label);
-        timerLabels.appendChild(currentTime);
-        timer.appendChild(timerLabels);
-        timer.appendChild(startButton);
-        timer.appendChild(pausedButtons);
-        timerList.appendChild(timer);
+        timerList.innerText = '';
+        timerList.style.textAlign = 'left';
+    
+        var timer, 
+            timerLabels, 
+            label, 
+            currentTime, 
+            startButton, 
+            pausedButtons,
+            resetButton,
+            resumeButton;
+    
+        // Hard-coded test data
+        response = {
+            success:true,
+            data: [
+                {
+                    label: 'CIT 365', 
+                    currentTime: '00:00:00'
+                },
+                {
+                    label: 'CS 313', 
+                    currentTime: '00:48:53'
+                },
+                {
+                    label: 'FDREL 250', 
+                    currentTime: '00:00:00'
+                }
+            ]
+        };
+    
+        for(var i = 0; i < response.data.length; i++) {
+            timer = document.createElement('div');
+            timer.setAttribute('class', 'timer');
+    
+            timerLabels = document.createElement('div');
+            timerLabels.setAttribute('class', 'timer-labels');
+            label = document.createElement('span');
+            label.setAttribute('class', 'label');
+            currentTime = document.createElement('span');
+            currentTime.setAttribute('class', 'time');
+    
+            startButton = document.createElement('button');
+            startButton.setAttribute('class', 'start-button');
+            startButton.innerText = 'Start';
+    
+            pausedButtons = document.createElement('div');
+            pausedButtons.setAttribute('class', 'paused-buttons');
+            resetButton = document.createElement('button');
+            resetButton.innerText = 'Reset';
+            resumeButton = document.createElement('button');
+            resumeButton.innerText = 'Resume';
+            pausedButtons.appendChild(resetButton);
+            pausedButtons.appendChild(resumeButton);
+    
+            label.innerHTML = response.data[i].label;
+            currentTime.innerHTML = response.data[i].currentTime;
+            timerLabels.appendChild(label);
+            timerLabels.appendChild(currentTime);
+            timer.appendChild(timerLabels);
+            timer.appendChild(startButton);
+            timer.appendChild(pausedButtons);
+            timerList.appendChild(timer);
+        }
     }
 }
