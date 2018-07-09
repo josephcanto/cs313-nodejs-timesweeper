@@ -217,6 +217,7 @@ button {
     align-items: center;
     justify-content: center;
     padding-bottom: 7px;
+    cursor: pointer;
 }
 
 @media (min-width: 737px) {
