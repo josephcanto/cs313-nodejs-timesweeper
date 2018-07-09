@@ -80,7 +80,7 @@ a:active {
     display: block;
     margin: 10px;
     width: 75%;
-    height: 75px;
+    height: 40px;
     padding: 5px;
 }
 
@@ -185,11 +185,6 @@ button {
 }
 
 @media (min-width: 737px) {
-    #login-page form input,
-    #registration-page form input {
-        height: 40px;
-    }
-
     .timer {
         border-bottom: 1px solid #ccc;
         height: 75px;
