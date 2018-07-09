@@ -33,7 +33,18 @@
             <form>
                 <input type='text' id='reg-username' name='username' placeholder='Username' required>
                 <input type='password' id='reg-password' name='password' placeholder='Password' required>
-                <input type='color' id='reg-theme' name='theme'>
+                <select id='reg-theme' name='theme' onclick='document.getElementById("theme-placeholder").setAttribute("hidden", "hidden")' required>
+                    <option id='theme-placeholder' disabled selected>Choose Theme</option>
+                    <option>Green</option>
+                    <option>Blue</option>
+                    <option>Dark</option>
+                    <option>Light</option>
+                    <option>Red</option>
+                    <option>Pink</option>
+                    <option>Purple</option>
+                    <option>Yellow</option>
+                    <option>Orange</option>
+                </select>
                 <button type='button' onclick='registerUser()'>Register</button>
             </form>
         </div>
