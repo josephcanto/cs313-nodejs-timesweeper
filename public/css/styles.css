@@ -86,17 +86,14 @@ a:active {
 }
 
 #login-page form input,
-#registration-page form input {
+#registration-page form input,
+#reg-theme {
     display: block;
     margin: 10px;
     width: 75%;
     height: 50px;
     padding: 5px;
     font-size: 1.25em;
-}
-
-#reg-theme {
-    height: 40px;
 }
 
 #login-page form button,
@@ -209,7 +206,8 @@ button {
     #login-page form input,
     #registration-page form input,
     #login-page form button,
-    #registration-page form button {
+    #registration-page form button,
+    #reg-theme {
         height: 40px;
     }
 
