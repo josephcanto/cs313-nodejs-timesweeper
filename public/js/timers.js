@@ -95,21 +95,25 @@ function buildTimerList(response) {
             startButton, 
             pausedButtons,
             resetButton,
-            resumeButton;
+            resumeButton,
+            deleteButton;
     
         // Hard-coded test data
         response = {
             success:true,
             data: [
                 {
+                    id: 1,
                     label: 'CIT 365', 
                     currentTime: '00:00:00'
                 },
                 {
+                    id: 2,
                     label: 'CS 313', 
                     currentTime: '00:48:53'
                 },
                 {
+                    id: 3,
                     label: 'FDREL 250', 
                     currentTime: '00:00:00'
                 }
@@ -119,6 +123,10 @@ function buildTimerList(response) {
         for(var i = 0; i < response.data.length; i++) {
             timer = document.createElement('div');
             timer.setAttribute('class', 'timer');
+
+            deleteButton = document.createElement('div');
+            deleteButton.setAttribute('class', 'delete-button');
+            deleteButton.innerText = '–';
     
             timerLabels = document.createElement('div');
             timerLabels.setAttribute('class', 'timer-labels');
@@ -144,10 +152,28 @@ function buildTimerList(response) {
             currentTime.innerHTML = response.data[i].currentTime;
             timerLabels.appendChild(label);
             timerLabels.appendChild(currentTime);
+            timer.appendChild(deleteButton);
             timer.appendChild(timerLabels);
             timer.appendChild(startButton);
             timer.appendChild(pausedButtons);
             timerList.appendChild(timer);
         }
+    }
+}
+
+function toggleDeleteBtns() {
+    var editLink = document.getElementById('edit-mode-link');
+    var deleteBtns = document.getElementsByClassName("delete-button");
+
+    if(editLink.innerText === 'Edit') {
+        for(var i = 0; i < deleteBtns.length; i++) {
+            deleteBtns[i].style.display = "flex";
+        }
+        editLink.innerText = 'Done';
+    } else if(editLink.innerText === 'Done') {
+        for(var i = 0; i < deleteBtns.length; i++) {
+            deleteBtns[i].style.display = "none";
+        }
+        editLink.innerText = 'Edit';
     }
 }

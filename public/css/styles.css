@@ -204,6 +204,21 @@ button {
     display: none;
 }
 
+.delete-button {
+    display: none;
+    background-color: red;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    color: white;
+    transition: .5s;
+    margin-right: -100px;
+    font-size: 2em;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 7px;
+}
+
 @media (min-width: 737px) {
     #login-page form input,
     #registration-page form input,
