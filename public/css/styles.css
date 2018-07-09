@@ -29,9 +29,19 @@ header {
     padding: 10px 5px 5px 5px;
 }
 
+#edit-mode-link {
+    display: none;
+    align-items: center;
+}
+
 #app-title {
     margin: 0;
     padding: 0;
+}
+
+#add-new-link {
+    display: none;
+    font-size: 1.65em;
 }
 
 a:link {
@@ -206,6 +216,10 @@ button {
     .timer {
         border-bottom: 1px solid #ccc;
         height: 75px;
+    }
+
+    .label {
+        font-size: 1.25em;
     }
 
     .time {

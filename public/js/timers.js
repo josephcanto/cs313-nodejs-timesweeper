@@ -71,6 +71,8 @@ function hideRegistration() {
 function showDashboard() {
     document.getElementById('dashboard-page').style.display = 'block';
     document.title='Dashboard | Timesweeper';
+    document.getElementById('edit-mode-link').style.display = 'flex';
+    document.getElementById('add-new-link').style.display = 'block';
 }
 
 function buildTimerList(response) {
