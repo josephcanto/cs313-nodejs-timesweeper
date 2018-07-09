@@ -4,6 +4,7 @@ const pool = new Pool({connectionString: connectionString}); //for local testing
 // const pool = new Pool({connectionString: connectionString, ssl: true});
 
 function getTimersFromDb(user_id, callback) {
+    console.log("User ID:", user_id);
     console.log("Getting timers from DB for user with id " + user_id + "...");
 
     var sql = 'SELECT label, "start", "current" FROM timers WHERE user_id = $1::int';

@@ -3,22 +3,24 @@ const connectionString = process.env.DATABASE_URL || "postgres://postgres:cs313@
 const pool = new Pool({connectionString: connectionString}); //for local testing
 // const pool = new Pool({connectionString: connectionString, ssl: true});
 
-function getUserIdByUsername(username) {
-    console.log("Getting info from DB for user with id " + id + "...");
+function getUserIdByUsername(username, callback) {
+    console.log("Getting info from DB for user with username " + username + "...");
 
-    var sql = 'SELECT id FROM users WHERE username = $1::string';
+    // var sql = 'SELECT id FROM users WHERE username = $1';
+    var sql = 'SELECT * FROM users';
     var params = [username];
-    
-    pool.query(sql, params, (err, result) => {
+
+    // pool.query(sql, params, (err, result) => {
+    pool.query(sql, (err, result) => {
         if(err) {
             console.log("Error in query: ");
             console.log(err);
             callback(err, null);
         }
 
-        console.log("Found result: " + JSON.stringify(result));
+        console.log("Found result: " + JSON.stringify(result.rows[0]));
 
-        callback(null, result);
+        // callback(null, result.rows[0]);
     });
 }
 

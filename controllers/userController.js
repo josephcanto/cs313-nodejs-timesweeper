@@ -1,4 +1,5 @@
 var model = require('../models/userModel');
+var timerModel = require('../models/timerModel');
 
 function registerUser(req, res) {
     var username = req.body.username;
@@ -44,8 +45,9 @@ function userLogin(req, res) {
     var password = req.body.password;
     console.log("Logging in user " + username + "...");
     console.log("Password: " + password);
-    var user_id = model.getUserIdByUsername(username);
-    res.json({success: true, user_id: user_id});
+    var timers = model.getUserIdByUsername(username, timerModel.getTimersFromDb);
+    console.log("Timers List:", timers);
+    res.json({success: true, timers: timers});
 }
 
 function userLogout(req, res) {
