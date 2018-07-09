@@ -16,8 +16,8 @@ body {
     background-color: #0087d0;
     margin: auto;
     min-height: 80%;
-    width: 350px;
-    overflow-y: scroll;
+    width: 100%;
+    max-width: 414px;
     padding: 0;
 }
 
@@ -39,7 +39,7 @@ a:link {
 }
 
 a:visited {
-    color: gray;
+    color: #ddd;
 }
 
 a:hover {
@@ -129,6 +129,10 @@ a:active {
     display: none;
 }
 /* End timer pages */
+
+#timer-list {
+    text-align: center;
+}
 
 .timer {
     display: flex;

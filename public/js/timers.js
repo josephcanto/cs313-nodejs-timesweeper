@@ -19,6 +19,7 @@ function callAjax(action, url, data, callback) {
 function openRegistration() {
     hideLogin();
     document.getElementById('registration-page').style.display = 'block';
+    document.title = 'Register | Timesweeper';
 }
 
 function registerUser() {
@@ -69,6 +70,7 @@ function hideRegistration() {
 
 function showDashboard() {
     document.getElementById('dashboard-page').style.display = 'block';
+    document.title='Dashboard | Timesweeper';
 }
 
 function buildTimerList(response) {
