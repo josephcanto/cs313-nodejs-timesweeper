@@ -44,7 +44,6 @@ function performLogin() {
     var password = document.getElementById('password').value;
     var url = '/login';
     var userData = {"username": username, "password": password};
-    console.log(userData);
     callAjax("POST", url, userData, getTimers);
     hideLogin();
     showDashboard();
