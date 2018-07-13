@@ -50,16 +50,11 @@ function performLogin() {
 }
 
 function getTimers(response) {
-    console.log("Received the following response after running the performLogin function:", response);
     var json = JSON.parse(response);
     if(json.success) {
         var user_id = json.data;
-        console.log("Found the following user ID:", user_id);
         var url = '/timers/' + user_id;
-        console.log("URL:", url);
         callAjax("GET", url, null, buildTimerList);
-    } else {
-        console.log("Error: Could not retrieve the user's ID");
     }
 }
 
@@ -86,10 +81,7 @@ function buildTimerList(response) {
 
     if(!json.success) {
         console.log("No timers were found for this user.");
-        return;
     } else {
-        console.log(json.data);
-
         timerList.innerText = '';
         timerList.style.textAlign = 'left';
     
