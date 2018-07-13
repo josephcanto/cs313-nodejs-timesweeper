@@ -10,16 +10,16 @@ function createTimer(req, res) {
 }
 
 function getTimers(request, response) {
-    if(request.params.user_id != null) {
-        var user_id = request.params.user_id;
-        model.getTimersFromDb(user_id, (error, result) => {
-            if(error || result == null || result.length < 1) {
-                response.status(500).json({success: false, data: error});
-            } else {
-                response.status(200).json(result);
-            }
-        });
-    }
+    console.log("Request object sent to getTimers function:", request);
+    console.log("User ID sent to getTimers function:", request.params.user_id);
+    var user_id = request.params.user_id;
+    model.getTimersFromDb(user_id, (error, result) => {
+        if(error || result == null || result.length < 1) {
+            response.status(500).json({success: false, data: error});
+        } else {
+            response.status(200).json({success: true, data: result});
+        }
+    });
 }
 
 function getTimerInfo(request, response) {

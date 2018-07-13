@@ -33,7 +33,7 @@ function registerUser() {
     var url = '/register';
     var userData = {"username": username, "password": password, "theme": theme};
     console.log(userData);
-    // callAjax("POST", url, userData, getTimers);
+    callAjax("POST", url, userData, getTimers);
     hideRegistration();
     showDashboard();
 }
@@ -47,17 +47,23 @@ function performLogin() {
     var url = '/login';
     var userData = {"username": username, "password": password};
     console.log(userData);
-    // callAjax("POST", url, userData, getTimers);
+    callAjax("POST", url, userData, getTimers);
     hideLogin();
     showDashboard();
-    buildTimerList({"label": "CS 313", "currentTime": "00:25:45"});
 }
 
 function getTimers(response) {
-    console.log(response);
-    // var user_id = response.user_id;
-    // var url = '/timers/' + user_id;
-    // callAjax("GET", url, null, buildTimerList);
+    console.log("Received the following response after running the performLogin function:", response);
+    var json = JSON.parse(response);
+    if(json.success) {
+        var user_id = json.data;
+        console.log("Found the following user ID:", user_id);
+        var url = '/timers/' + user_id;
+        console.log("URL:", url);
+        callAjax("GET", url, null, buildTimerList);
+    } else {
+        console.log("Error: Could not retrieve the user's ID");
+    }
 }
 
 function hideLogin() {
@@ -79,11 +85,13 @@ function buildTimerList(response) {
     var timerList = document.getElementById('timer-list');
     timerList.style.display = 'block';
 
-    if(!response) {
+    var json = JSON.parse(response);
+
+    if(!json.success) {
         console.log("No timers were found for this user.");
         return;
     } else {
-        console.log(response);
+        console.log(json.data);
 
         timerList.innerText = '';
         timerList.style.textAlign = 'left';
@@ -98,29 +106,7 @@ function buildTimerList(response) {
             resumeButton,
             deleteButton;
     
-        // Hard-coded test data
-        response = {
-            success:true,
-            data: [
-                {
-                    id: 1,
-                    label: 'CIT 365', 
-                    currentTime: '00:00:00'
-                },
-                {
-                    id: 2,
-                    label: 'CS 313', 
-                    currentTime: '00:48:53'
-                },
-                {
-                    id: 3,
-                    label: 'FDREL 250', 
-                    currentTime: '00:00:00'
-                }
-            ]
-        };
-    
-        for(var i = 0; i < response.data.length; i++) {
+        for(var i = 0; i < json.data.length; i++) {
             timer = document.createElement('div');
             timer.setAttribute('class', 'timer');
 
@@ -148,8 +134,8 @@ function buildTimerList(response) {
             pausedButtons.appendChild(resetButton);
             pausedButtons.appendChild(resumeButton);
     
-            label.innerHTML = response.data[i].label;
-            currentTime.innerHTML = response.data[i].currentTime;
+            label.innerHTML = json.data[i].label;
+            currentTime.innerHTML = json.data[i].current;
             timerLabels.appendChild(label);
             timerLabels.appendChild(currentTime);
             timer.appendChild(deleteButton);

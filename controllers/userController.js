@@ -43,11 +43,27 @@ function deleteUser(req, res) {
 function userLogin(req, res) {
     var username = req.body.username;
     var password = req.body.password;
-    console.log("Logging in user " + username + "...");
-    console.log("Password: " + password);
-    var timers = model.getUserIdByUsername(username, timerModel.getTimersFromDb);
-    console.log("Timers List:", timers);
-    res.json({success: true, timers: timers});
+    console.log("Checking credentials for user " + username + "...");
+    // model.validateLogin(model.getUserId, username, password);
+    model.validateLogin(req, res, model.getUserId, username, password);
+    
+    // if(user_id) {
+        // res.json({success: true, data: user_id});
+        // console.log("Getting timers for user with ID:", result.rows[0].id);
+        // var timersList = timerModel.getTimersFromDb(result.rows[0].id);
+        // console.log("Found the following timers for user" + username + ": " + timersList);
+    // } else {
+    //     console.log("Error retrieving ID for user", username);
+    //     res.json({success: false});
+    // }
+    
+    // if(timersList.rows[0]) {
+    //     console.log("Timers List:", timersList.rows[0]);
+    //     res.json({success: true, timers: timersList.rows[0]});
+    // } else {
+    //     console.log("Error retrieving timers list or no timers found");
+    //     res.json({success: false});
+    // }
 }
 
 function userLogout(req, res) {

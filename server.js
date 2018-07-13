@@ -8,6 +8,7 @@ app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(logRequest);
 
 // Default route
 app.get('/', (req, res) => res.send('index.html')); // working
@@ -30,3 +31,8 @@ app.delete('/timer/:id', timerController.deleteTimer);
 app.listen(app.get('port'), function() {
     console.log('Timesweeper app listening on port:', app.get('port'));
 });
+
+function logRequest(req, res, next) {
+    console.log(`Recieved a request for: ${req.url}`);
+    next();
+}
