@@ -39,7 +39,6 @@ function registerUser() {
 }
 
 function performLogin() {
-    console.log('Logging in...');
     var username = document.getElementById('username').value;
     var password = document.getElementById('password').value;
     var url = '/login';
