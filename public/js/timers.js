@@ -4,7 +4,9 @@ function callAjax(action, url, data, callback) {
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && (xmlhttp.status == 200 || xmlhttp.status == 201 || xmlhttp.status == 204)) {
-            callback(xmlhttp.responseText);
+            if(callback) {
+                callback(xmlhttp.responseText);
+            }
         }
     }
     xmlhttp.open(action, url, true);
@@ -16,36 +18,41 @@ function callAjax(action, url, data, callback) {
     }
 }
 
-function openRegistration() {
-    hideLogin();
-    document.getElementById('registration-page').style.display = 'block';
-    document.title = 'Register | Timesweeper';
-}
-
 function registerUser() {
     console.log('Registering user...');
     var username = document.getElementById('reg-username').value;
     var password = document.getElementById('reg-password').value;
-    var theme = document.getElementById('reg-theme').value;
-    console.log('User:', username);
-    console.log('PW:', password);
-    console.log('Theme:', theme);
-    var url = '/register';
-    var userData = {"username": username, "password": password, "theme": theme};
-    console.log(userData);
-    callAjax("POST", url, userData, getTimers);
-    hideRegistration();
-    showDashboard();
+    var theme = document.getElementById('reg-theme').value.toLowerCase();
+    if(username && password && theme !== "choose theme") {
+        var url = '/register';
+        var userData = {"username": username, "password": password, "theme": theme};
+        console.log(userData);
+        callAjax("POST", url, userData, (response) => {
+            var json = JSON.parse(response);
+            if(!json.success && json.message) {
+                document.getElementById('message').innerText = json.message;
+            } else {
+                hideRegistration();
+                showDashboard();
+            }
+        });
+    } else {
+        document.getElementById('message').innerText = "Please fill out all form fields.";
+    }
 }
 
 function performLogin() {
     var username = document.getElementById('username').value;
     var password = document.getElementById('password').value;
-    var url = '/login';
-    var userData = {"username": username, "password": password};
-    callAjax("POST", url, userData, getTimers);
-    hideLogin();
-    showDashboard();
+    if(username && password) {
+        var url = '/login';
+        var userData = {"username": username, "password": password};
+        callAjax("POST", url, userData, getTimers);
+        hideLogin();
+        showDashboard();
+    } else {
+        document.getElementById('notice').innerText = "Please fill out all form fields.";
+    }
 }
 
 function getTimers(response) {
@@ -57,12 +64,31 @@ function getTimers(response) {
     }
 }
 
+function showLogin() {
+    document.getElementById('login-page').style.display = 'block';
+    document.getElementById('notice').innerText = '';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.title = 'Login | Timesweeper';
+}
+
 function hideLogin() {
     document.getElementById('login-page').style.display = 'none';
 }
 
-function hideRegistration() {
+function showRegistration() {
+    hideLogin();
+    document.getElementById('registration-page').style.display = 'block';
+    document.getElementById('message').innerText = '';
+    document.getElementById('reg-username').value = '';
+    document.getElementById('reg-password').value = '';
+    document.getElementById('reg-theme').value = 'Choose Theme';
+    document.title = 'Register | Timesweeper';
+}
+
+function hideRegistration(action) {
     document.getElementById('registration-page').style.display = 'none';
+    if(action) showLogin();
 }
 
 function showDashboard() {
@@ -70,6 +96,10 @@ function showDashboard() {
     document.title='Dashboard | Timesweeper';
     document.getElementById('edit-mode-link').style.display = 'flex';
     document.getElementById('add-new-link').style.display = 'block';
+}
+
+function hideDashboard() {
+    document.getElementById('dashboard-page').style.display = 'none';
 }
 
 function buildTimerList(response) {

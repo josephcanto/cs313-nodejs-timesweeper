@@ -1,5 +1,4 @@
 var model = require('../models/userModel');
-var timerModel = require('../models/timerModel');
 
 function registerUser(req, res) {
     var username = req.body.username;
@@ -8,7 +7,7 @@ function registerUser(req, res) {
     console.log("Registering user " + username + "...");
     console.log("Password: " + password);
     console.log("Theme: " + theme);
-    res.json({success: true});
+    model.checkForExistingUsernameInDb(username, password, theme, res, model.addNewUserToDb);
 }
 
 function getUserInfo(request, response) {
@@ -44,26 +43,7 @@ function userLogin(req, res) {
     var username = req.body.username;
     var password = req.body.password;
     console.log("Checking credentials for user " + username + "...");
-    // model.validateLogin(model.getUserId, username, password);
     model.validateLogin(req, res, model.getUserId, username, password);
-    
-    // if(user_id) {
-        // res.json({success: true, data: user_id});
-        // console.log("Getting timers for user with ID:", result.rows[0].id);
-        // var timersList = timerModel.getTimersFromDb(result.rows[0].id);
-        // console.log("Found the following timers for user" + username + ": " + timersList);
-    // } else {
-    //     console.log("Error retrieving ID for user", username);
-    //     res.json({success: false});
-    // }
-    
-    // if(timersList.rows[0]) {
-    //     console.log("Timers List:", timersList.rows[0]);
-    //     res.json({success: true, timers: timersList.rows[0]});
-    // } else {
-    //     console.log("Error retrieving timers list or no timers found");
-    //     res.json({success: false});
-    // }
 }
 
 function userLogout(req, res) {

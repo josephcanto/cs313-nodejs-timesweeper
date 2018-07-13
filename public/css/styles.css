@@ -120,6 +120,11 @@ a:active {
     border: 2px solid white;
     color: white;
 }
+
+#notice, #message {
+    width: 75%;
+    margin: 15px auto -25px auto;
+}
 /* End user pages */
 
 /* Timer pages */
