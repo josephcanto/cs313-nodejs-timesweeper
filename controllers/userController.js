@@ -43,7 +43,7 @@ function userLogin(req, res) {
     var username = req.body.username;
     var password = req.body.password;
     console.log("Checking credentials for user " + username + "...");
-    model.validateLogin(req, res, model.getUserId, username, password);
+    model.validateLogin(res, model.getUserId, username, password);
 }
 
 function userLogout(req, res) {
