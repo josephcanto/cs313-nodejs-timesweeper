@@ -42,8 +42,6 @@ function performLogin() {
     console.log('Logging in...');
     var username = document.getElementById('username').value;
     var password = document.getElementById('password').value;
-    console.log('User:', username);
-    console.log('PW:', password);
     var url = '/login';
     var userData = {"username": username, "password": password};
     console.log(userData);
