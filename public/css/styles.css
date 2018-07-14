@@ -185,15 +185,24 @@ button {
     height: 40px;
     cursor: pointer;
     transition: .5s;
-}
-
-.start-button,
-.paused-buttons button {
     font-size: 1em;
 }
 
-.start-button:hover {
+button:hover {
     border: 1px solid white;
+    background-color: #0087d0;
+    color: white;
+}
+
+.control-buttons {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.reset-button {
+    display: none;
     background-color: #0087d0;
     color: white;
 }
@@ -201,15 +210,6 @@ button {
 .active-timer {
     background-color: white;
     color: black;
-}
-
-.paused-buttons {
-    display: none;
-}
-
-.paused-buttons button {
-    background-color: #0087d0;
-    color: white;
 }
 
 .delete-button {

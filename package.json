@@ -18,6 +18,7 @@
   "homepage": "https://github.com/josephcanto/cs313-nodejs-timesweeper#readme",
   "dependencies": {
     "express": "^4.16.3",
+    "express-session": "^1.15.6",
     "pg": "^7.4.3"
   }
 }

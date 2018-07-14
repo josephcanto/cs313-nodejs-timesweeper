@@ -113,24 +113,24 @@ function buildTimerList(response) {
     } else {
         timerList.innerText = '';
         timerList.style.textAlign = 'left';
-    
+        
         var timer, 
-            timerLabels, 
-            label, 
-            currentTime, 
-            startButton, 
-            pausedButtons,
-            resetButton,
-            resumeButton,
-            deleteButton;
+        timerLabels, 
+        label, 
+        currentTime,
+        startPauseResumeBtn,
+        controlBtns,
+        resetBtn,
+        deleteBtn;
     
         for(var i = 0; i < json.data.length; i++) {
             timer = document.createElement('div');
             timer.setAttribute('class', 'timer');
+            timer.setAttribute('data-timer-num', i);
 
-            deleteButton = document.createElement('div');
-            deleteButton.setAttribute('class', 'delete-button');
-            deleteButton.innerText = '–';
+            deleteBtn = document.createElement('div');
+            deleteBtn.setAttribute('class', 'delete-button');
+            deleteBtn.innerText = '–';
     
             timerLabels = document.createElement('div');
             timerLabels.setAttribute('class', 'timer-labels');
@@ -138,31 +138,29 @@ function buildTimerList(response) {
             label.setAttribute('class', 'label');
             currentTime = document.createElement('span');
             currentTime.setAttribute('class', 'time');
-    
-            startButton = document.createElement('button');
-            startButton.setAttribute('class', 'start-button');
-            startButton.innerText = 'Start';
-            startButton.setAttribute('onclick', 'startTimer(this)')
-    
-            pausedButtons = document.createElement('div');
-            pausedButtons.setAttribute('class', 'paused-buttons');
-            resetButton = document.createElement('button');
-            resetButton.innerText = 'Reset';
-            resetButton.setAttribute('onclick', 'resetCurrentTime(this, '+ i + ')');
-            resumeButton = document.createElement('button');
-            resumeButton.innerText = 'Resume';
-            resumeButton.setAttribute('onclick', 'swapBtns(this)');
-            pausedButtons.appendChild(resetButton);
-            pausedButtons.appendChild(resumeButton);
+
+            startPauseResumeBtn = document.createElement('button');
+            startPauseResumeBtn.setAttribute('class', 'start-pause-resume-button');
+            startPauseResumeBtn.innerText = 'Start';
+            startPauseResumeBtn.setAttribute('onclick', 'changeBtnText(this)');
+            startPauseResumeBtn.setAttribute('data-timer-state', 'untouched');
+
+            controlBtns = document.createElement('div');
+            controlBtns.setAttribute('class', 'control-buttons');
+            resetBtn = document.createElement('button');
+            resetBtn.innerText = 'Reset';
+            resetBtn.setAttribute('class', 'reset-button');
+            resetBtn.setAttribute('onclick', 'resetCurrentTime(this, '+ i + ')');
     
             label.innerHTML = json.data[i].label;
             currentTime.innerHTML = json.data[i].current;
             timerLabels.appendChild(label);
             timerLabels.appendChild(currentTime);
-            timer.appendChild(deleteButton);
+            controlBtns.appendChild(resetBtn);
+            controlBtns.appendChild(startPauseResumeBtn);
+            timer.appendChild(deleteBtn);
             timer.appendChild(timerLabels);
-            timer.appendChild(startButton);
-            timer.appendChild(pausedButtons);
+            timer.appendChild(controlBtns);
             timerList.appendChild(timer);
         }
     }
@@ -170,15 +168,16 @@ function buildTimerList(response) {
 
 function toggleDeleteBtns() {
     var editLink = document.getElementById('edit-mode-link');
-    var deleteBtns = document.getElementsByClassName("delete-button");
-    console.log(document.getElementsByClassName('timer')[0].classList.contains('active-timer') && document.getElementsByClassName('timer')[0].getElementsByTagName('button')[0].innerText != 'Pause');
-    console.log(document.getElementsByClassName('timer')[0].classList.contains('active-timer'));
+    var deleteBtns = document.getElementsByClassName('delete-button');
+    var timers = document.getElementsByClassName('timer');
+    var controlBtns = document.getElementsByClassName('control-buttons');
+    var resetBtns = document.getElementsByClassName('reset-button');
+    var startPauseResumeBtns = document.getElementsByClassName('start-pause-resume-button');
 
     if(editLink.innerText == 'Edit') {
-        for(var i = 0; i < document.getElementsByClassName('timer').length; i++) {
-            document.getElementsByClassName('timer')[i].getElementsByTagName('button')[0].style.visibility = 'hidden';
-            document.getElementsByClassName('timer')[i].getElementsByTagName('button')[0].style.display = 'block';
-            document.getElementsByClassName('timer')[i].getElementsByClassName('paused-buttons')[0].style.display = 'none';
+        for(var i = 0; i < timers.length; i++) {
+            controlBtns[i].style.visibility = 'hidden';
+            resetBtns[i].style.display = 'none';
         }
 
         for(var i = 0; i < deleteBtns.length; i++) {
@@ -186,12 +185,10 @@ function toggleDeleteBtns() {
         }
         editLink.innerText = 'Done';
     } else if(editLink.innerText == 'Done') {
-        for(var i = 0; i < document.getElementsByClassName('timer').length; i++) {
-            if(document.getElementsByClassName('timer')[i].classList.contains('active-timer') && document.getElementsByClassName('timer')[i].getElementsByTagName('button')[0].innerText != 'Pause') {
-                document.getElementsByClassName('timer')[i].getElementsByClassName('paused-buttons')[0].style.display = 'block';
-                document.getElementsByClassName('timer')[i].getElementsByTagName('button')[0].style.display = 'none';
-            } else {                
-                document.getElementsByClassName('timer')[i].getElementsByTagName('button')[0].style.visibility = 'visible';
+        for(var i = 0; i < timers.length; i++) {
+            controlBtns[i].style.visibility = 'visible';
+            if(startPauseResumeBtns[i].getAttribute('data-timer-state') == 'paused') {
+                resetBtns[i].style.display = 'block';
             }
         }
 
@@ -202,51 +199,110 @@ function toggleDeleteBtns() {
     }
 }
 
-function startTimer(element) {
-    if(!element.parentElement.classList.contains('active-timer')) {
-        element.parentElement.classList.add('active-timer');
-    }
-
-    // TODO: Add functionality to make the timer start counting
-
-    if(element.innerText == 'Start') {
-        element.innerText = 'Pause';
-        if(element.classList.contains('start-button')) {
-            element.classList.remove('start-button');
-        }
-        element.style.backgroundColor = '#0087d0';
-        element.style.color = 'white';
-        element.style.fontSize = '1em';
-    } else {
-        element.nextSibling.style.display = 'block';
-        element.nextSibling.style.visibility = 'visible';
-        element.style.display = 'none';
-        element.style.visibility = 'hidden';
-    }
-}
+// function startTimer(element) {
+//     var timer = element.parentElement.parentElement;
+//     var timerNum = timer.getAttribute('data-timer-num');
+//     timer.classList.add('active-timer');
+//     element.innerText = 'Pause';
+//     element.setAttribute('onclick', 'changeBtnText(this)');
+//     element.style.backgroundColor = '#0087d0';
+//     element.style.color = 'white';
+//     var timeLabel = element.parentElement.previousSibling.lastChild;
+//     startTime(timerNum, timeLabel);
+//     element.setAttribute('data-timer-state', 'touched');
+//     console.log("Start time:", timeLabel.innerText);
+// }
 
 function resetCurrentTime(element, timerNum) {
-    document.getElementsByClassName('time')[timerNum].innerText = '00:00:00';
+    // TODO: Add AJAX call that resets the currentTime on the specified timer to 00:00:00 in the database as well
+    console.log("Reset time:", document.getElementsByClassName('time')[timerNum].innerText);
+    // document.getElementsByClassName('time')[timerNum].innerText = '00:00:00';
     element.parentElement.parentElement.classList.remove('active-timer');
-    document.getElementsByClassName('paused-buttons')[timerNum].style.display = 'none';
-    var startButton = document.getElementsByClassName('timer')[timerNum].getElementsByTagName('button')[0];
-    startButton.innerText = 'Start';
-    startButton.style.backgroundColor = 'white';
-    startButton.style.color = '#0087d0';
-    startButton.style.display = 'block';
-    startButton.style.visibility = 'visible';
+    document.getElementsByClassName('reset-button')[timerNum].style.display = 'none';
+    var startPauseResumeBtn = document.getElementsByClassName('start-pause-resume-button')[timerNum];
+    startPauseResumeBtn.innerText = 'Start';
+    startPauseResumeBtn.setAttribute('data-timer-state', 'untouched');
+    startPauseResumeBtn.style.backgroundColor = 'white';
+    startPauseResumeBtn.style.color = '#0087d0';
+    
 }
 
-function swapBtns(element) {
+function changeBtnText(element) {
+    var timeLabel = element.parentElement.previousSibling.lastChild;
+    var timer = element.parentElement.parentElement;
+    var timerNum = timer.getAttribute('data-timer-num');
+
     if(element.innerText == 'Pause') { 
         element.innerText = 'Resume';
-        element.previousSibling.style.visibility = 'visible';
-        // TODO: Implement resumeTimer function
-        // element.setAttribute('onclick', 'resumeTimer()');
-    } else {
+        element.previousSibling.style.display = 'block';
+        controlTimer(timerNum, timeLabel);
+        element.setAttribute('data-timer-state', 'paused');
+        console.log("Pause time:", timeLabel.innerText);
+    } else if(element.innerText == 'Resume') {
         element.innerText = 'Pause';
-        element.previousSibling.style.visibility = 'hidden';
-        // TODO: Implement pauseTimer function()
-        // element.setAttribute('onclick', 'pauseTimer()');
+        element.previousSibling.style.display = 'none';
+        controlTimer(timerNum, timeLabel);
+        element.setAttribute('data-timer-state', 'unpaused');
+        console.log("Resume time:", timeLabel.innerText);
+    } else {
+        timer.classList.add('active-timer');
+        element.innerText = 'Pause';
+        element.style.backgroundColor = '#0087d0';
+        element.style.color = 'white';
+        element.previousSibling.style.display = 'none';
+        controlTimer(timerNum, timeLabel);
+        element.setAttribute('data-timer-state', 'touched');
+        console.log("Start time:", timeLabel.innerText);
+    }
+}
+
+var t;
+
+/* JavaScript timer borrowed from https://jsfiddle.net/Daniel_Hug/pvk6p/ */
+function controlTimer(timerNum, timeLabel) {
+    var startPauseResumeBtn = document.getElementsByClassName('start-pause-resume-button')[timerNum],
+        resetBtn = document.getElementsByClassName('reset-button')[timerNum],
+        seconds = 0, minutes = 0, hours = 0;
+        //var t;
+    
+    function add() {
+        seconds++;
+        if (seconds >= 60) {
+            seconds = 0;
+            minutes++;
+            if (minutes >= 60) {
+                minutes = 0;
+                hours++;
+            }
+        }
+        
+        timeLabel.innerText = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+        
+        timer();
+    }
+    function timer() {
+        t = setTimeout(add, 1000);
+    }
+
+    var timerState = startPauseResumeBtn.getAttribute('data-timer-state');
+    console.log("Timer state:", timerState);
+
+    if(timerState == 'untouched') {
+        console.log("Starting...");
+        timer();
+    } else if(timerState == 'touched' || timerState == 'unpaused') {
+        console.log("Pausing...");
+        clearTimeout(t);
+    } else {
+        console.log("Resuming...");
+        // TODO: Figure out how to unpause the timer without resetting it to zero...
+        timer();
+    }
+    
+    /* Clear button */
+    resetBtn.onclick = function() {
+        timeLabel.innerText = "00:00:00";
+        seconds = 0; minutes = 0; hours = 0;
+        resetCurrentTime(resetBtn, timerNum);
     }
 }
