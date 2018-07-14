@@ -204,9 +204,12 @@ button {
 }
 
 .paused-buttons {
+    display: none;
+}
+
+.paused-buttons button {
     background-color: #0087d0;
     color: white;
-    display: none;
 }
 
 .delete-button {

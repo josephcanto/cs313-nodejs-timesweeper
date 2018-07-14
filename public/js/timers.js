@@ -142,13 +142,16 @@ function buildTimerList(response) {
             startButton = document.createElement('button');
             startButton.setAttribute('class', 'start-button');
             startButton.innerText = 'Start';
+            startButton.setAttribute('onclick', 'startTimer(this)')
     
             pausedButtons = document.createElement('div');
             pausedButtons.setAttribute('class', 'paused-buttons');
             resetButton = document.createElement('button');
             resetButton.innerText = 'Reset';
+            resetButton.setAttribute('onclick', 'resetCurrentTime(this, '+ i + ')');
             resumeButton = document.createElement('button');
             resumeButton.innerText = 'Resume';
+            resumeButton.setAttribute('onclick', 'swapBtns(this)');
             pausedButtons.appendChild(resetButton);
             pausedButtons.appendChild(resumeButton);
     
@@ -168,16 +171,82 @@ function buildTimerList(response) {
 function toggleDeleteBtns() {
     var editLink = document.getElementById('edit-mode-link');
     var deleteBtns = document.getElementsByClassName("delete-button");
+    console.log(document.getElementsByClassName('timer')[0].classList.contains('active-timer') && document.getElementsByClassName('timer')[0].getElementsByTagName('button')[0].innerText != 'Pause');
+    console.log(document.getElementsByClassName('timer')[0].classList.contains('active-timer'));
 
-    if(editLink.innerText === 'Edit') {
+    if(editLink.innerText == 'Edit') {
+        for(var i = 0; i < document.getElementsByClassName('timer').length; i++) {
+            document.getElementsByClassName('timer')[i].getElementsByTagName('button')[0].style.visibility = 'hidden';
+            document.getElementsByClassName('timer')[i].getElementsByTagName('button')[0].style.display = 'block';
+            document.getElementsByClassName('timer')[i].getElementsByClassName('paused-buttons')[0].style.display = 'none';
+        }
+
         for(var i = 0; i < deleteBtns.length; i++) {
             deleteBtns[i].style.display = "flex";
         }
         editLink.innerText = 'Done';
-    } else if(editLink.innerText === 'Done') {
+    } else if(editLink.innerText == 'Done') {
+        for(var i = 0; i < document.getElementsByClassName('timer').length; i++) {
+            if(document.getElementsByClassName('timer')[i].classList.contains('active-timer') && document.getElementsByClassName('timer')[i].getElementsByTagName('button')[0].innerText != 'Pause') {
+                document.getElementsByClassName('timer')[i].getElementsByClassName('paused-buttons')[0].style.display = 'block';
+                document.getElementsByClassName('timer')[i].getElementsByTagName('button')[0].style.display = 'none';
+            } else {                
+                document.getElementsByClassName('timer')[i].getElementsByTagName('button')[0].style.visibility = 'visible';
+            }
+        }
+
         for(var i = 0; i < deleteBtns.length; i++) {
             deleteBtns[i].style.display = "none";
         }
         editLink.innerText = 'Edit';
+    }
+}
+
+function startTimer(element) {
+    if(!element.parentElement.classList.contains('active-timer')) {
+        element.parentElement.classList.add('active-timer');
+    }
+
+    // TODO: Add functionality to make the timer start counting
+
+    if(element.innerText == 'Start') {
+        element.innerText = 'Pause';
+        if(element.classList.contains('start-button')) {
+            element.classList.remove('start-button');
+        }
+        element.style.backgroundColor = '#0087d0';
+        element.style.color = 'white';
+        element.style.fontSize = '1em';
+    } else {
+        element.nextSibling.style.display = 'block';
+        element.nextSibling.style.visibility = 'visible';
+        element.style.display = 'none';
+        element.style.visibility = 'hidden';
+    }
+}
+
+function resetCurrentTime(element, timerNum) {
+    document.getElementsByClassName('time')[timerNum].innerText = '00:00:00';
+    element.parentElement.parentElement.classList.remove('active-timer');
+    document.getElementsByClassName('paused-buttons')[timerNum].style.display = 'none';
+    var startButton = document.getElementsByClassName('timer')[timerNum].getElementsByTagName('button')[0];
+    startButton.innerText = 'Start';
+    startButton.style.backgroundColor = 'white';
+    startButton.style.color = '#0087d0';
+    startButton.style.display = 'block';
+    startButton.style.visibility = 'visible';
+}
+
+function swapBtns(element) {
+    if(element.innerText == 'Pause') { 
+        element.innerText = 'Resume';
+        element.previousSibling.style.visibility = 'visible';
+        // TODO: Implement resumeTimer function
+        // element.setAttribute('onclick', 'resumeTimer()');
+    } else {
+        element.innerText = 'Pause';
+        element.previousSibling.style.visibility = 'hidden';
+        // TODO: Implement pauseTimer function()
+        // element.setAttribute('onclick', 'pauseTimer()');
     }
 }
