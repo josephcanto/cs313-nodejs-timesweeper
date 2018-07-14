@@ -6,7 +6,7 @@ const pool = new Pool({connectionString: connectionString}); // for local testin
 function getTimersFromDb(user_id, callback) {
     console.log("Getting timers from DB for user with ID " + user_id + "...");
 
-    var sql = 'SELECT label, "start", "current" FROM timers WHERE user_id = $1';
+    var sql = 'SELECT id, label, "start", "current" FROM timers WHERE user_id = $1';
     var params = [user_id];
     
     pool.query(sql, params, (err, result) => {

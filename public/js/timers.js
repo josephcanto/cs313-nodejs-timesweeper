@@ -1,4 +1,4 @@
-// Using function from: https://stackoverflow.com/questions/8567114/how-to-make-an-ajax-call-without-jquery
+// The function below was borrowed from: https://stackoverflow.com/questions/8567114/how-to-make-an-ajax-call-without-jquery
 function callAjax(action, url, data, callback) {
     var xmlhttp;
     xmlhttp = new XMLHttpRequest();
@@ -16,6 +16,32 @@ function callAjax(action, url, data, callback) {
         xmlhttp.setRequestHeader('Content-type', 'application/json');
         xmlhttp.send(JSON.stringify(data));
     }
+}
+
+/* User-related functions */
+
+function performLogin() {
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+    if(username && password) {
+        var url = '/login';
+        var userData = {"username": username, "password": password};
+        callAjax("POST", url, userData, getTimers);
+    } else {
+        document.getElementById('notice').innerText = "Please fill out all form fields.";
+    }
+}
+
+function showLogin() {
+    document.getElementById('login-page').style.display = 'block';
+    document.getElementById('notice').innerText = '';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.title = 'Login | Timesweeper';
+}
+
+function hideLogin() {
+    document.getElementById('login-page').style.display = 'none';
 }
 
 function registerUser() {
@@ -39,41 +65,6 @@ function registerUser() {
     } else {
         document.getElementById('message').innerText = "Please fill out all form fields.";
     }
-}
-
-function performLogin() {
-    var username = document.getElementById('username').value;
-    var password = document.getElementById('password').value;
-    if(username && password) {
-        var url = '/login';
-        var userData = {"username": username, "password": password};
-        callAjax("POST", url, userData, getTimers);
-        hideLogin();
-        showDashboard();
-    } else {
-        document.getElementById('notice').innerText = "Please fill out all form fields.";
-    }
-}
-
-function getTimers(response) {
-    var json = JSON.parse(response);
-    if(json.success) {
-        var user_id = json.data;
-        var url = '/timers/' + user_id;
-        callAjax("GET", url, null, buildTimerList);
-    }
-}
-
-function showLogin() {
-    document.getElementById('login-page').style.display = 'block';
-    document.getElementById('notice').innerText = '';
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-    document.title = 'Login | Timesweeper';
-}
-
-function hideLogin() {
-    document.getElementById('login-page').style.display = 'none';
 }
 
 function showRegistration() {
@@ -102,6 +93,39 @@ function hideDashboard() {
     document.getElementById('dashboard-page').style.display = 'none';
 }
 
+/* End of user-related functions */
+
+/**********************************************************************/
+
+/* Timer-related functions */
+
+function createTimer() {
+    // TODO: Implement function for creating a new timer
+}
+
+function getTimers(response) {
+    var json = JSON.parse(response);
+    if(json.success) {
+        hideLogin();
+        showDashboard();
+        var user_id = json.data;
+        var url = '/timers/' + user_id;
+        callAjax("GET", url, null, buildTimerList);
+    } else {
+        document.getElementById('notice').innerText = json.message;
+    }
+}
+
+function editTimer(element) {
+    // TODO: Implement function for editing a timer
+    var timerId = element.parentElement.getAttribute('data-timer-id');
+
+}
+
+function deleteTimer() {
+    // TODO: Implement function for deleting a timer
+}
+
 function buildTimerList(response) {
     var timerList = document.getElementById('timer-list');
     timerList.style.display = 'block';
@@ -127,10 +151,12 @@ function buildTimerList(response) {
             timer = document.createElement('div');
             timer.setAttribute('class', 'timer');
             timer.setAttribute('data-timer-num', i);
+            timer.setAttribute('data-timer-id', json.data[i].id);
 
             deleteBtn = document.createElement('div');
             deleteBtn.setAttribute('class', 'delete-button');
             deleteBtn.innerText = '–';
+            deleteBtn.setAttribute('onclick', 'editTimer(this)')
     
             timerLabels = document.createElement('div');
             timerLabels.setAttribute('class', 'timer-labels');
@@ -139,18 +165,29 @@ function buildTimerList(response) {
             currentTime = document.createElement('span');
             currentTime.setAttribute('class', 'time');
 
-            startPauseResumeBtn = document.createElement('button');
-            startPauseResumeBtn.setAttribute('class', 'start-pause-resume-button');
-            startPauseResumeBtn.innerText = 'Start';
-            startPauseResumeBtn.setAttribute('onclick', 'changeBtnText(this)');
-            startPauseResumeBtn.setAttribute('data-timer-state', 'untouched');
-
             controlBtns = document.createElement('div');
             controlBtns.setAttribute('class', 'control-buttons');
             resetBtn = document.createElement('button');
             resetBtn.innerText = 'Reset';
             resetBtn.setAttribute('class', 'reset-button');
             resetBtn.setAttribute('onclick', 'resetCurrentTime(this, '+ i + ')');
+
+            startPauseResumeBtn = document.createElement('button');
+            startPauseResumeBtn.setAttribute('class', 'start-pause-resume-button');
+            startPauseResumeBtn.setAttribute('onclick', 'changeBtnText(this)');
+
+            // Check to see if the timer is set to zero
+            if(json.data[i].current != "00:00:00") {
+                timer.classList.add('active-timer');
+                startPauseResumeBtn.innerText = 'Resume';
+                startPauseResumeBtn.setAttribute('data-timer-state', 'paused');
+                startPauseResumeBtn.style.backgroundColor = '#0087d0';
+                startPauseResumeBtn.style.color = 'white';
+                resetBtn.style.display = 'block';
+            } else {
+                startPauseResumeBtn.innerText = 'Start';
+                startPauseResumeBtn.setAttribute('data-timer-state', 'untouched');
+            }
     
             label.innerHTML = json.data[i].label;
             currentTime.innerHTML = json.data[i].current;
@@ -199,25 +236,11 @@ function toggleDeleteBtns() {
     }
 }
 
-// function startTimer(element) {
-//     var timer = element.parentElement.parentElement;
-//     var timerNum = timer.getAttribute('data-timer-num');
-//     timer.classList.add('active-timer');
-//     element.innerText = 'Pause';
-//     element.setAttribute('onclick', 'changeBtnText(this)');
-//     element.style.backgroundColor = '#0087d0';
-//     element.style.color = 'white';
-//     var timeLabel = element.parentElement.previousSibling.lastChild;
-//     startTime(timerNum, timeLabel);
-//     element.setAttribute('data-timer-state', 'touched');
-//     console.log("Start time:", timeLabel.innerText);
-// }
-
 function resetCurrentTime(element, timerNum) {
     // TODO: Add AJAX call that resets the currentTime on the specified timer to 00:00:00 in the database as well
     console.log("Reset time:", document.getElementsByClassName('time')[timerNum].innerText);
-    // document.getElementsByClassName('time')[timerNum].innerText = '00:00:00';
     element.parentElement.parentElement.classList.remove('active-timer');
+    element.parentElement.previousSibling.lastChild.innerText = "00:00:00";
     document.getElementsByClassName('reset-button')[timerNum].style.display = 'none';
     var startPauseResumeBtn = document.getElementsByClassName('start-pause-resume-button')[timerNum];
     startPauseResumeBtn.innerText = 'Start';
@@ -256,16 +279,21 @@ function changeBtnText(element) {
     }
 }
 
+/* Parts of this JavaScript timer were borrowed from https://jsfiddle.net/Daniel_Hug/pvk6p/ */
 var t;
 
-/* JavaScript timer borrowed from https://jsfiddle.net/Daniel_Hug/pvk6p/ */
 function controlTimer(timerNum, timeLabel) {
     var startPauseResumeBtn = document.getElementsByClassName('start-pause-resume-button')[timerNum],
         resetBtn = document.getElementsByClassName('reset-button')[timerNum],
-        seconds = 0, minutes = 0, hours = 0;
-        //var t;
+        seconds = 0, minutes = 0, hours = 0,
+        hms; // stands for hours / minutes / seconds
     
     function add() {
+        hms = timeLabel.innerText.split(':');
+        hours = parseInt(hms[0]);
+        minutes = parseInt(hms[1]);
+        seconds = parseInt(hms[2]);
+
         seconds++;
         if (seconds >= 60) {
             seconds = 0;
@@ -280,29 +308,28 @@ function controlTimer(timerNum, timeLabel) {
         
         timer();
     }
+
     function timer() {
         t = setTimeout(add, 1000);
     }
 
     var timerState = startPauseResumeBtn.getAttribute('data-timer-state');
-    console.log("Timer state:", timerState);
 
     if(timerState == 'untouched') {
-        console.log("Starting...");
+        console.log("Starting timer...");
         timer();
     } else if(timerState == 'touched' || timerState == 'unpaused') {
-        console.log("Pausing...");
+        console.log("Pausing timer...");
         clearTimeout(t);
     } else {
-        console.log("Resuming...");
-        // TODO: Figure out how to unpause the timer without resetting it to zero...
-        timer();
+        console.log("Unpausing timer...");
+        t = setTimeout(add, 1000);
     }
     
-    /* Clear button */
     resetBtn.onclick = function() {
-        timeLabel.innerText = "00:00:00";
-        seconds = 0; minutes = 0; hours = 0;
+        console.log("Resetting timer...");
         resetCurrentTime(resetBtn, timerNum);
     }
 }
+
+/* End of timer-related functions */

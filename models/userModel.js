@@ -19,8 +19,10 @@ function validateLogin(res, callback, username, password) {
                 console.log("User credentials match. Logging in user" + username + "...");
                 callback(null, username, res);
             } else {
-                callback("Invalid username or password", null, res);
+                callback("Invalid username or password.", null, res);
             }
+        } else {
+            res.json({success: false, message: "Invalid username or password."});
         }
     });
 }
