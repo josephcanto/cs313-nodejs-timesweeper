@@ -18,7 +18,7 @@ function getTimers(request, response) {
     var user_id = request.params.user_id;
     model.getTimersFromDb(user_id, (error, result) => {
         if(error || result == null || result.length < 1) {
-            response.status(500).json({success: false, data: error});
+            response.status(500).json({success: false, error: error});
         } else {
             response.status(200).json({success: true, data: result});
         }

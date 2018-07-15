@@ -113,11 +113,13 @@ function showCreateTimerPage() {
 function hideCreateTimerPage() {
     document.getElementById('create-timer-page').style.display = 'none';
     document.getElementById('edit-mode-link').setAttribute('onclick', 'toggleDeleteBtns()');
-    if(document.getElementsByClassName('delete-button')[0].style.display == 'flex') {
-        document.getElementById('edit-mode-link').innerText = 'Done';
-    } else {
-        document.getElementById('edit-mode-link').innerText = 'Edit';
-    }
+    if(document.getElementsByClassName('delete-button')[0] != null) {
+        if(document.getElementsByClassName('delete-button')[0].style.display == 'flex') {
+            document.getElementById('edit-mode-link').innerText = 'Done';
+        } else {
+            document.getElementById('edit-mode-link').innerText = 'Edit';
+        }
+    } 
     document.getElementById('app-title').innerText = 'Timesweeper';
     document.getElementById('add-new-link').style.visibility = 'visible';
     showDashboard();
@@ -252,7 +254,7 @@ function buildTimerList(response) {
 
     var json = JSON.parse(response);
 
-    if(!json.success) {
+    if(json.error) {
         console.log("No timers were found for this user.");
     } else {
         timerList.innerText = '';
