@@ -18,7 +18,7 @@
     <header>
         <span id='edit-mode-link' onclick='toggleDeleteBtns()'>Edit</span>
         <h2 id='app-title'>Timesweeper</h2>
-        <span id='add-new-link'>+</span>
+        <span id='add-new-link' onclick='showCreateTimerPage()'>+</span>
     </header>
     <main>
         <div id='login-page'>
@@ -51,22 +51,41 @@
                 <p>Existing user? <a href='#' title='Login here' onclick='hideRegistration("login")'>Login</a></p>
             </form>
         </div>
-        <div id='dashboard-page'>
+        <div id='dashboard-page' class='hide'>
             <div id='timer-list'>No timers to display</div>
         </div>
         <div id='edit-user-page'>Edit User Info Page</div>
         <div id='settings-page'>Settings Page</div>
-        <div id='create-timer-page'>Create Timer Page</div>
+        <div id='create-timer-page'>
+            <form>
+                <select id='timer-type' onclick='document.getElementById("type-placeholder").setAttribute("hidden", "hidden")' required>
+                    <option id='type-placeholder' disabled selected>Choose Timer Type</option>
+                    <option>Stopwatch</option>
+                    <option disabled>Countdown (coming soon)</option>
+                </select>
+                <input type='text' id='new-label' placeholder='Label' required>
+                <input type='text' id='new-start' placeholder='Start time' required>
+                <button type='button' onclick='createTimer()'>Create Timer</button>
+            </form>
+        </div>
         <div id='edit-timer-page'>
             <form>
-                <input type='text' id='edit-label' name='edit-label'>
-                <input type='text' id='edit-start' name='edit-label'>
-                <input type='text' id='edit-current' name='edit-label'>
-                <input type='hidden' id='timer-id' name='timer-id'>
+                <input type='text' id='edit-label' required>
+                <input type='text' id='edit-start' required>
+                <input type='text' id='edit-current' required>
+                <input type='hidden' id='timer-id'>
                 <button type='button' onclick='editTimer()'>Submit Changes</button>
             </form>
         </div>
-        <div id='delete-timer-page'>Delete Timer Page</div>
+        <div id='delete-timer-page'>
+            <form>
+                <input type='text' id='delete-label' disabled>
+                <input type='text' id='delete-start' disabled>
+                <input type='text' id='delete-current' disabled>
+                <input type='hidden' id='delete-timer-id'>
+                <button type='button' onclick='deleteTimer()'>Confirm Deletion</button>
+            </form>
+        </div>
     </main>
     <script src='js/timers.js'></script>
 </body>

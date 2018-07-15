@@ -13,21 +13,20 @@ app.use(session({ secret: 'super-secret', cookie: { maxAge: 3600000 }}));
 app.use(logRequest);
 
 // Default route
-app.get('/', (req, res) => res.send('index.html'));
+app.get('/', (req, res) => res.send('index.html')); // done
 
 // User routes
-app.post('/register', userController.registerUser);
+app.post('/register', userController.registerUser); // done
 app.get('/user/:id', userController.getUserInfo);
 app.put('/user/:id', userController.editUserInfo);
 app.delete('/user/:id', userController.deleteUser);
-app.post('/login', userController.userLogin);
+app.post('/login', userController.userLogin); // done
 app.post('/logout', userController.userLogout);
 
 // Timer routes
-app.post('/timer', timerController.createTimer);
-app.get('/timers/:user_id', storeUserId, timerController.getTimers);
-app.get('/timer/:id', timerController.getTimerInfo);
-app.put('/timer/:id', timerController.editTimerInfo);
+app.post('/timer', timerController.createTimer); // done
+app.get('/timers/:user_id', storeUserId, timerController.getTimers); // done
+app.put('/timer/:id', timerController.editTimerInfo); // done
 app.delete('/timer/:id', timerController.deleteTimer);
 
 app.listen(app.get('port'), function() {

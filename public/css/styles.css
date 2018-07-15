@@ -129,7 +129,6 @@ a:active {
 
 /* Timer pages */
 #dashboard-page {
-    display: none;
     margin-top: 10px;
 }
 
@@ -228,23 +227,41 @@ button:hover {
     cursor: pointer;
 }
 
-#edit-timer-page form {
+#edit-timer-page form,
+#create-timer-page form {
     display: flex;
     flex-flow: column nowrap;
 }
 
-#edit-timer-page input {
+#edit-timer-page input,
+#create-timer-page input,
+#create-timer-page select,
+#create-timer-page option {
     background-color: rgba(255,255,255,0.1);
     height: 40px;
     color: white;
     margin: 5px 0;
     padding: 10px;
     border: none;
+    font-size: 1em;
 }
 
-#edit-timer-page button {
+#create-timer-page option {
+    color: black;
+}
+
+#edit-timer-page button,
+#create-timer-page button {
     width: 100%;
     margin: 5px 0 0 0;
+}
+
+#create-timer-page ::placeholder {
+    color: white;
+}
+
+.hide {
+    display: none;
 }
 
 @media (min-width: 737px) {

@@ -83,14 +83,14 @@ function hideRegistration(action) {
 }
 
 function showDashboard() {
-    document.getElementById('dashboard-page').style.display = 'block';
+    document.getElementById('dashboard-page').classList.remove('hide');
     document.title='Dashboard | Timesweeper';
     document.getElementById('edit-mode-link').style.display = 'flex';
     document.getElementById('add-new-link').style.display = 'block';
 }
 
 function hideDashboard() {
-    document.getElementById('dashboard-page').style.display = 'none';
+    document.getElementById('dashboard-page').classList.add('hide');
 }
 
 /* End of user-related functions */
@@ -99,8 +99,43 @@ function hideDashboard() {
 
 /* Timer-related functions */
 
+function showCreateTimerPage() {
+    hideDashboard();
+    document.getElementById('edit-mode-link').setAttribute('onclick', 'hideCreateTimerPage()');
+    document.getElementById('edit-mode-link').innerText = 'Cancel';
+    document.getElementById('app-title').innerText = 'Create Timer';
+    document.getElementById('add-new-link').style.visibility = 'hidden';
+    document.getElementById('create-timer-page').style.display = 'block';
+}
+
+function hideCreateTimerPage() {
+    document.getElementById('create-timer-page').style.display = 'none';
+    document.getElementById('edit-mode-link').setAttribute('onclick', 'toggleDeleteBtns()');
+    document.getElementById('edit-mode-link').innerText = 'Edit';
+    document.getElementById('app-title').innerText = 'Timesweeper';
+    document.getElementById('add-new-link').style.visibility = 'visible';
+    showDashboard();
+}
+
 function createTimer() {
-    // TODO: Implement function for creating a new timer
+    var timerLabel = document.getElementById('new-label').value;
+    var startTime = document.getElementById('new-start').value;
+    var currentTime;
+    if(document.getElementById('timer-type').value == 'Stopwatch') {
+        currentTime = "00:00:00";
+    } else {
+        currentTime = startTime;
+    }
+    console.log("Timer label:", timerLabel, "Start time:", startTime, "Current time:", currentTime);
+    hideCreateTimerPage();
+    
+    var url = '/timer';
+    var timerData = {
+        "label": timerLabel,
+        "start": startTime,
+        "current": currentTime
+    }
+    callAjax("POST", url, timerData, getTimers);
 }
 
 function getTimers(response) {
@@ -131,9 +166,8 @@ function disableEdit(timers) {
 }
 
 function showTimerEditPage(element) {
-    // hideDashboard();
     document.getElementById('dashboard-page').style.display = 'none';
-    document.getElementById('edit-mode-link').setAttribute('onclick', hideTimerEditPage());
+    document.getElementById('edit-mode-link').setAttribute('onclick', 'hideTimerEditPage()');
     document.getElementById('edit-mode-link').innerText = 'Cancel';
     document.getElementById('app-title').innerText = 'Edit Timer';
     document.getElementById('add-new-link').style.visibility = 'hidden';
@@ -146,21 +180,59 @@ function showTimerEditPage(element) {
 
 function hideTimerEditPage() {
     document.getElementById('edit-timer-page').style.display = 'none';
-    document.getElementById('edit-mode-link').setAttribute('onclick', toggleDeleteBtns());
+    document.getElementById('edit-mode-link').setAttribute('onclick', 'toggleDeleteBtns()');
     document.getElementById('edit-mode-link').innerText = 'Done';
+    document.getElementById('app-title').innerText = 'Timesweeper';
+    document.getElementById('add-new-link').style.visibility = 'visible';
+    document.getElementById('dashboard-page').style.display = 'block';
+}
+
+function editTimer() {
+    var timerLabel = document.getElementById('edit-label').value;
+    var startTime = document.getElementById('edit-start').value;
+    var currentTime = document.getElementById('edit-current').value;
+    var timerId = document.getElementById('timer-id').value;
+    console.log("Timer label:", timerLabel, "Start time:", startTime, "Current time:", currentTime, "Timer ID:", timerId);
+    hideTimerEditPage();
+    
+    var url = '/timer/' + timerId;
+    var timerData = {
+        "label": timerLabel,
+        "start": startTime,
+        "current": currentTime,
+        "id": timerId
+    }
+    callAjax("PUT", url, timerData, getTimers);
+}
+
+function showDeleteTimerPage(element) {
+    hideDashboard();
+    document.getElementById('edit-mode-link').setAttribute('onclick', 'hideDeleteTimerPage()');
+    document.getElementById('edit-mode-link').innerText = 'Cancel';
+    document.getElementById('app-title').innerText = 'Delete Timer';
+    document.getElementById('add-new-link').style.visibility = 'hidden';
+    document.getElementById('delete-label').value = element.getElementsByClassName('label')[0].innerText;
+    document.getElementById('delete-start').value = element.getAttribute('data-timer-start');
+    document.getElementById('delete-current').value = element.getElementsByClassName('time')[0].innerText;
+    document.getElementById('delete-timer-id').value = element.getAttribute('data-timer-id');
+    document.getElementById('delete-timer-page').style.display = 'block';
+}
+
+function hideDeleteTimerPage() {
+    document.getElementById('delete-timer-page').style.display = 'none';
+    document.getElementById('edit-mode-link').setAttribute('onclick', 'toggleDeleteBtns()');
+    document.getElementById('edit-mode-link').innerText = 'Edit';
     document.getElementById('app-title').innerText = 'Timesweeper';
     document.getElementById('add-new-link').style.visibility = 'visible';
     showDashboard();
 }
 
-function editTimer() {
-    // TODO: Implement AJAX function for editing a timer
-    var timerId = element.getAttribute('data-timer-id');
-    hideTimerEditPage();
-}
-
-function deleteTimer(element) {
-    // TODO: Implement AJAX function for deleting a timer
+function deleteTimer() {
+    var timerId = document.getElementById('delete-timer-id').value;
+    hideDeleteTimerPage();
+    
+    var url = '/timer/' + timerId;
+    callAjax("DELETE", url, null, getTimers);
 }
 
 function buildTimerList(response) {
@@ -194,7 +266,7 @@ function buildTimerList(response) {
             deleteBtn = document.createElement('div');
             deleteBtn.setAttribute('class', 'delete-button');
             deleteBtn.innerText = '–';
-            deleteBtn.setAttribute('onclick', 'deleteTimer(this)');
+            deleteBtn.setAttribute('onclick', 'showDeleteTimerPage(this)');
     
             timerLabels = document.createElement('div');
             timerLabels.setAttribute('class', 'timer-labels');
@@ -214,7 +286,6 @@ function buildTimerList(response) {
             startPauseResumeBtn.setAttribute('class', 'start-pause-resume-button');
             startPauseResumeBtn.setAttribute('onclick', 'changeBtnText(this)');
 
-            // Check to see if the timer is set to zero
             if(json.data[i].current != "00:00:00") {
                 timer.classList.add('active-timer');
                 startPauseResumeBtn.innerText = 'Resume';
@@ -237,6 +308,10 @@ function buildTimerList(response) {
             timer.appendChild(timerLabels);
             timer.appendChild(controlBtns);
             timerList.appendChild(timer);
+
+            if(document.getElementById('edit-mode-link').innerText == 'Done') {
+                toggleDeleteBtns();
+            }
         }
     }
 }
@@ -277,7 +352,6 @@ function toggleDeleteBtns() {
 }
 
 function resetCurrentTime(element, timerNum) {
-    // TODO: Add AJAX call that resets the currentTime on the specified timer to 00:00:00 in the database as well
     console.log("Reset time:", document.getElementsByClassName('time')[timerNum].innerText);
     element.parentElement.parentElement.classList.remove('active-timer');
     element.parentElement.previousSibling.lastChild.innerText = "00:00:00";
@@ -288,6 +362,18 @@ function resetCurrentTime(element, timerNum) {
     startPauseResumeBtn.style.backgroundColor = 'white';
     startPauseResumeBtn.style.color = '#0087d0';
     
+    var timerLabel = element.parentElement.previousSibling.firstChild.innerText;
+    var startTime = element.parentElement.parentElement.getAttribute('data-timer-start');
+    var currentTime = element.parentElement.previousSibling.lastChild.innerText;
+    var timerId = element.parentElement.parentElement.getAttribute('data-timer-id');
+    var url = '/timer/' + timerId;
+    var timerData = {
+        "label": timerLabel,
+        "start": startTime,
+        "current": currentTime,
+        "id": timerId
+    }
+    callAjax("PUT", url, timerData, getTimers);
 }
 
 function changeBtnText(element) {
@@ -301,6 +387,19 @@ function changeBtnText(element) {
         controlTimer(timerNum, timeLabel);
         element.setAttribute('data-timer-state', 'paused');
         console.log("Pause time:", timeLabel.innerText);
+
+        var timerLabel = element.parentElement.previousSibling.firstChild.innerText;
+        var startTime = timer.getAttribute('data-timer-start');
+        var currentTime = timeLabel.innerText;
+        var timerId = timer.getAttribute('data-timer-id');
+        var url = '/timer/' + timerId;
+        var timerData = {
+            "label": timerLabel,
+            "start": startTime,
+            "current": currentTime,
+            "id": timerId
+        }
+        callAjax("PUT", url, timerData, getTimers);
     } else if(element.innerText == 'Resume') {
         element.innerText = 'Pause';
         element.previousSibling.style.display = 'none';
