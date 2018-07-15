@@ -228,6 +228,25 @@ button:hover {
     cursor: pointer;
 }
 
+#edit-timer-page form {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+#edit-timer-page input {
+    background-color: rgba(255,255,255,0.1);
+    height: 40px;
+    color: white;
+    margin: 5px 0;
+    padding: 10px;
+    border: none;
+}
+
+#edit-timer-page button {
+    width: 100%;
+    margin: 5px 0 0 0;
+}
+
 @media (min-width: 737px) {
     #login-page form input,
     #registration-page form input,

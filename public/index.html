@@ -57,7 +57,15 @@
         <div id='edit-user-page'>Edit User Info Page</div>
         <div id='settings-page'>Settings Page</div>
         <div id='create-timer-page'>Create Timer Page</div>
-        <div id='edit-timer-page'>Edit Timer Page</div>
+        <div id='edit-timer-page'>
+            <form>
+                <input type='text' id='edit-label' name='edit-label'>
+                <input type='text' id='edit-start' name='edit-label'>
+                <input type='text' id='edit-current' name='edit-label'>
+                <input type='hidden' id='timer-id' name='timer-id'>
+                <button type='button' onclick='editTimer()'>Submit Changes</button>
+            </form>
+        </div>
         <div id='delete-timer-page'>Delete Timer Page</div>
     </main>
     <script src='js/timers.js'></script>

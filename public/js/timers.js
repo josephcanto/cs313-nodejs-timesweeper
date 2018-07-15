@@ -116,14 +116,51 @@ function getTimers(response) {
     }
 }
 
-function editTimer(element) {
-    // TODO: Implement function for editing a timer
-    var timerId = element.parentElement.getAttribute('data-timer-id');
-
+function enableEdit(timers) {
+    for(var i = 0; i < timers.length; i++) {
+        timers[i].setAttribute('onclick', 'showTimerEditPage(this)');
+        timers[i].style.cursor = 'pointer';
+    }
 }
 
-function deleteTimer() {
-    // TODO: Implement function for deleting a timer
+function disableEdit(timers) {
+    for(var i = 0; i < timers.length; i++) {
+        timers[i].setAttribute('onclick', '');
+        timers[i].style.cursor = 'default';
+    }
+}
+
+function showTimerEditPage(element) {
+    // hideDashboard();
+    document.getElementById('dashboard-page').style.display = 'none';
+    document.getElementById('edit-mode-link').setAttribute('onclick', hideTimerEditPage());
+    document.getElementById('edit-mode-link').innerText = 'Cancel';
+    document.getElementById('app-title').innerText = 'Edit Timer';
+    document.getElementById('add-new-link').style.visibility = 'hidden';
+    document.getElementById('edit-timer-page').style.display = 'block';
+    document.getElementById('edit-label').value = element.getElementsByClassName('label')[0].innerText;
+    document.getElementById('edit-start').value = element.getAttribute('data-timer-start');
+    document.getElementById('edit-current').value = element.getElementsByClassName('time')[0].innerText;
+    document.getElementById('timer-id').value = element.getAttribute('data-timer-id');
+}
+
+function hideTimerEditPage() {
+    document.getElementById('edit-timer-page').style.display = 'none';
+    document.getElementById('edit-mode-link').setAttribute('onclick', toggleDeleteBtns());
+    document.getElementById('edit-mode-link').innerText = 'Done';
+    document.getElementById('app-title').innerText = 'Timesweeper';
+    document.getElementById('add-new-link').style.visibility = 'visible';
+    showDashboard();
+}
+
+function editTimer() {
+    // TODO: Implement AJAX function for editing a timer
+    var timerId = element.getAttribute('data-timer-id');
+    hideTimerEditPage();
+}
+
+function deleteTimer(element) {
+    // TODO: Implement AJAX function for deleting a timer
 }
 
 function buildTimerList(response) {
@@ -152,11 +189,12 @@ function buildTimerList(response) {
             timer.setAttribute('class', 'timer');
             timer.setAttribute('data-timer-num', i);
             timer.setAttribute('data-timer-id', json.data[i].id);
+            timer.setAttribute('data-timer-start', json.data[i].start);
 
             deleteBtn = document.createElement('div');
             deleteBtn.setAttribute('class', 'delete-button');
             deleteBtn.innerText = '–';
-            deleteBtn.setAttribute('onclick', 'editTimer(this)')
+            deleteBtn.setAttribute('onclick', 'deleteTimer(this)');
     
             timerLabels = document.createElement('div');
             timerLabels.setAttribute('class', 'timer-labels');
@@ -221,6 +259,7 @@ function toggleDeleteBtns() {
             deleteBtns[i].style.display = "flex";
         }
         editLink.innerText = 'Done';
+        enableEdit(timers);
     } else if(editLink.innerText == 'Done') {
         for(var i = 0; i < timers.length; i++) {
             controlBtns[i].style.visibility = 'visible';
@@ -233,6 +272,7 @@ function toggleDeleteBtns() {
             deleteBtns[i].style.display = "none";
         }
         editLink.innerText = 'Edit';
+        disableEdit(timers);
     }
 }
 
