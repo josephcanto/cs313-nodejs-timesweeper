@@ -119,7 +119,9 @@ function hideCreateTimerPage() {
         } else {
             document.getElementById('edit-mode-link').innerText = 'Edit';
         }
-    } 
+    } else {
+        document.getElementById('edit-mode-link').innerText = 'Edit';
+    }
     document.getElementById('app-title').innerText = 'Timesweeper';
     document.getElementById('add-new-link').style.visibility = 'visible';
     showDashboard();
