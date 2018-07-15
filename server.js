@@ -27,7 +27,7 @@ app.post('/logout', userController.userLogout);
 app.post('/timer', timerController.createTimer); // done
 app.get('/timers/:user_id', storeUserId, timerController.getTimers); // done
 app.put('/timer/:id', timerController.editTimerInfo); // done
-app.delete('/timer/:id', timerController.deleteTimer);
+app.delete('/timer/:id', timerController.deleteTimer); // done
 
 app.listen(app.get('port'), function() {
     console.log('Timesweeper app listening on port:', app.get('port'));

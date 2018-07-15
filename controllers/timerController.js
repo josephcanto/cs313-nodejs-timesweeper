@@ -5,10 +5,6 @@ function createTimer(req, res) {
     var startTime = req.body.start;
     var currentTime = req.body.current;
     var user_id = req.session.userId;
-    console.log("Creating new timer for user with id " + user_id + "...");
-    console.log("Label:", label);
-    console.log("Start time:", startTime);
-    console.log("Current time:", currentTime);
     model.addTimerToDb(label, startTime, currentTime, user_id, (error, result) => {
         if(error || result == null || result.length < 1) {
             res.status(500).json({success: false, data: error});
@@ -34,10 +30,6 @@ function editTimerInfo(req, res) {
     var label = req.body.label;
     var startTime = req.body.start;
     var currentTime = req.body.current;
-    console.log("Saving changes to info for timer with id " + id + "...");
-    console.log("Label: " + label);
-    console.log("Start time: " + startTime);
-    console.log("Current time: " + currentTime);
     model.editTimerInfoInDb(id, label, startTime, currentTime, (error, result) => {
         if(error || result == null || result.length < 1) {
             res.status(500).json({success: false, data: error});
@@ -49,7 +41,6 @@ function editTimerInfo(req, res) {
 
 function deleteTimer(req, res) {
     var timerId = req.params.id;
-    console.log("Deleting timer with id " + timerId + "...");
     model.deleteTimerFromDb(timerId, (error, result) => {
         if(error || result == null || result.length < 1) {
             res.status(500).json({success: false, data: error});
@@ -57,7 +48,6 @@ function deleteTimer(req, res) {
             res.status(200).json({success: true, data: req.session.userId});
         }
     });
-    res.json({success: true});
 }
 
 module.exports = {

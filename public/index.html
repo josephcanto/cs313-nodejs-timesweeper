@@ -58,21 +58,21 @@
         <div id='settings-page'>Settings Page</div>
         <div id='create-timer-page'>
             <form>
-                <select id='timer-type' onclick='document.getElementById("type-placeholder").setAttribute("hidden", "hidden")' required>
+                <select id='timer-type' onclick='document.getElementById("type-placeholder").setAttribute("hidden", "true")' required>
                     <option id='type-placeholder' disabled selected>Choose Timer Type</option>
                     <option>Stopwatch</option>
                     <option disabled>Countdown (coming soon)</option>
                 </select>
-                <input type='text' id='new-label' placeholder='Label' required>
-                <input type='text' id='new-start' placeholder='Start time' required>
+                <input type='text' id='new-label' placeholder='Enter label' required>
+                <input type='text' id='new-start' placeholder='Enter start time' required>
                 <button type='button' onclick='createTimer()'>Create Timer</button>
             </form>
         </div>
         <div id='edit-timer-page'>
             <form>
-                <input type='text' id='edit-label' required>
-                <input type='text' id='edit-start' required>
-                <input type='text' id='edit-current' required>
+                <input type='text' id='edit-label' placeholder='Enter label' required>
+                <input type='text' id='edit-start' placeholder='Enter start time' required>
+                <input type='text' id='edit-current' placeholder='Enter current time' required>
                 <input type='hidden' id='timer-id'>
                 <button type='button' onclick='editTimer()'>Submit Changes</button>
             </form>

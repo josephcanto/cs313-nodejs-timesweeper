@@ -225,10 +225,12 @@ button:hover {
     justify-content: center;
     padding-bottom: 7px;
     cursor: pointer;
+    z-index: 100;
 }
 
 #edit-timer-page form,
-#create-timer-page form {
+#create-timer-page form,
+#delete-timer-page form {
     display: flex;
     flex-flow: column nowrap;
 }
@@ -236,7 +238,8 @@ button:hover {
 #edit-timer-page input,
 #create-timer-page input,
 #create-timer-page select,
-#create-timer-page option {
+#create-timer-page option,
+#delete-timer-page input {
     background-color: rgba(255,255,255,0.1);
     height: 40px;
     color: white;
@@ -251,11 +254,13 @@ button:hover {
 }
 
 #edit-timer-page button,
-#create-timer-page button {
+#create-timer-page button,
+#delete-timer-page button {
     width: 100%;
     margin: 5px 0 0 0;
 }
 
+#edit-timer-page ::placeholder,
 #create-timer-page ::placeholder {
     color: white;
 }

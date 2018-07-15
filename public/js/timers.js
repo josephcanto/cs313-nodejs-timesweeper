@@ -84,6 +84,7 @@ function hideRegistration(action) {
 
 function showDashboard() {
     document.getElementById('dashboard-page').classList.remove('hide');
+    document.getElementById('dashboard-page').style.display = 'block';
     document.title='Dashboard | Timesweeper';
     document.getElementById('edit-mode-link').style.display = 'flex';
     document.getElementById('add-new-link').style.display = 'block';
@@ -91,6 +92,7 @@ function showDashboard() {
 
 function hideDashboard() {
     document.getElementById('dashboard-page').classList.add('hide');
+    document.getElementById('dashboard-page').style.display = 'none';
 }
 
 /* End of user-related functions */
@@ -111,7 +113,11 @@ function showCreateTimerPage() {
 function hideCreateTimerPage() {
     document.getElementById('create-timer-page').style.display = 'none';
     document.getElementById('edit-mode-link').setAttribute('onclick', 'toggleDeleteBtns()');
-    document.getElementById('edit-mode-link').innerText = 'Edit';
+    if(document.getElementsByClassName('delete-button')[0].style.display == 'flex') {
+        document.getElementById('edit-mode-link').innerText = 'Done';
+    } else {
+        document.getElementById('edit-mode-link').innerText = 'Edit';
+    }
     document.getElementById('app-title').innerText = 'Timesweeper';
     document.getElementById('add-new-link').style.visibility = 'visible';
     showDashboard();
@@ -127,6 +133,11 @@ function createTimer() {
         currentTime = startTime;
     }
     console.log("Timer label:", timerLabel, "Start time:", startTime, "Current time:", currentTime);
+    document.getElementById('type-placeholder').hidden = false;
+    document.getElementById('timer-type').selectedIndex = 0;
+    document.getElementById('new-label').value = '';
+    document.getElementById('new-start').value = '';
+
     hideCreateTimerPage();
     
     var url = '/timer';
@@ -153,15 +164,15 @@ function getTimers(response) {
 
 function enableEdit(timers) {
     for(var i = 0; i < timers.length; i++) {
-        timers[i].setAttribute('onclick', 'showTimerEditPage(this)');
-        timers[i].style.cursor = 'pointer';
+        timers[i].firstChild.nextSibling.setAttribute('onclick', 'showTimerEditPage(this)');
+        timers[i].firstChild.nextSibling.style.cursor = 'pointer';
     }
 }
 
 function disableEdit(timers) {
     for(var i = 0; i < timers.length; i++) {
-        timers[i].setAttribute('onclick', '');
-        timers[i].style.cursor = 'default';
+        timers[i].firstChild.nextSibling.setAttribute('onclick', '');
+        timers[i].firstChild.nextSibling.style.cursor = 'default';
     }
 }
 
@@ -172,10 +183,10 @@ function showTimerEditPage(element) {
     document.getElementById('app-title').innerText = 'Edit Timer';
     document.getElementById('add-new-link').style.visibility = 'hidden';
     document.getElementById('edit-timer-page').style.display = 'block';
-    document.getElementById('edit-label').value = element.getElementsByClassName('label')[0].innerText;
-    document.getElementById('edit-start').value = element.getAttribute('data-timer-start');
-    document.getElementById('edit-current').value = element.getElementsByClassName('time')[0].innerText;
-    document.getElementById('timer-id').value = element.getAttribute('data-timer-id');
+    document.getElementById('edit-label').value = element.firstChild.innerText;
+    document.getElementById('edit-start').value = element.parentElement.getAttribute('data-timer-start');
+    document.getElementById('edit-current').value = element.lastChild.innerText;
+    document.getElementById('timer-id').value = element.parentElement.getAttribute('data-timer-id');
 }
 
 function hideTimerEditPage() {
@@ -211,17 +222,17 @@ function showDeleteTimerPage(element) {
     document.getElementById('edit-mode-link').innerText = 'Cancel';
     document.getElementById('app-title').innerText = 'Delete Timer';
     document.getElementById('add-new-link').style.visibility = 'hidden';
-    document.getElementById('delete-label').value = element.getElementsByClassName('label')[0].innerText;
-    document.getElementById('delete-start').value = element.getAttribute('data-timer-start');
-    document.getElementById('delete-current').value = element.getElementsByClassName('time')[0].innerText;
-    document.getElementById('delete-timer-id').value = element.getAttribute('data-timer-id');
+    document.getElementById('delete-label').value = element.nextSibling.firstChild.innerText;
+    document.getElementById('delete-start').value = element.parentElement.getAttribute('data-timer-start');
+    document.getElementById('delete-current').value = element.nextSibling.lastChild.innerText;
+    document.getElementById('delete-timer-id').value = element.parentElement.getAttribute('data-timer-id');
     document.getElementById('delete-timer-page').style.display = 'block';
 }
 
 function hideDeleteTimerPage() {
     document.getElementById('delete-timer-page').style.display = 'none';
     document.getElementById('edit-mode-link').setAttribute('onclick', 'toggleDeleteBtns()');
-    document.getElementById('edit-mode-link').innerText = 'Edit';
+    document.getElementById('edit-mode-link').innerText = 'Done';
     document.getElementById('app-title').innerText = 'Timesweeper';
     document.getElementById('add-new-link').style.visibility = 'visible';
     showDashboard();
