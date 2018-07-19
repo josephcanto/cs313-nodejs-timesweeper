@@ -203,14 +203,15 @@ function disableEdit(timers) {
 
 function showTimerEditPage(element) {
     document.getElementById('dashboard-page').style.display = 'none';
-    document.getElementById('edit-mode-link').setAttribute('onclick', 'hideTimerEditPage()');
+    document.getElementById('edit-mode-link').setAttribute('onclick', 'hideTimerEditPage(' + element + ')');
     document.getElementById('edit-mode-link').innerText = 'Cancel';
     document.getElementById('app-title').innerText = 'Edit Timer';
     document.getElementById('add-new-link').style.visibility = 'hidden';
     document.getElementById('edit-timer-page').style.display = 'block';
     document.getElementById('edit-label').value = element.firstChild.innerText;
-    document.getElementById('edit-start').value = element.parentElement.getAttribute('data-timer-start');
+    // document.getElementById('edit-start').value = element.parentElement.getAttribute('data-timer-start');
     document.getElementById('edit-current').value = element.lastChild.innerText;
+    document.getElementById('edit-timer-num').value = element.parentElement.getAttribute('data-timer-num');
     document.getElementById('timer-id').value = element.parentElement.getAttribute('data-timer-id');
 }
 
@@ -225,20 +226,38 @@ function hideTimerEditPage() {
 
 function editTimer() {
     var timerLabel = document.getElementById('edit-label').value;
-    var startTime = document.getElementById('edit-start').value;
+    var timerNum = document.getElementById('edit-timer-num').value;
+    // var startTime = document.getElementById('edit-start').value;
+    var startTime = '00:00:00';
     var currentTime = document.getElementById('edit-current').value;
-    var timerId = document.getElementById('timer-id').value;
-    console.log("Timer label:", timerLabel, "Start time:", startTime, "Current time:", currentTime, "Timer ID:", timerId);
-    hideTimerEditPage();
-    
-    var url = '/timer/' + timerId;
-    var timerData = {
-        "label": timerLabel,
-        "start": startTime,
-        "current": currentTime,
-        "id": timerId
+    if(!currentTime.match(/([0-9]{2}:){2}[0-9]{2}/)) {
+        document.getElementById('incorrect-format-notice').style.display = 'block';
+        return;
+    } else {
+        if(document.getElementById('incorrect-format-notice').style.display == 'block') {
+            document.getElementById('incorrect-format-notice').style.display = 'none';
+        }
+        var timerId = document.getElementById('timer-id').value;
+        console.log("Timer label:", timerLabel, "Start time:", startTime, "Current time:", currentTime, "Timer ID:", timerId);
+        hideTimerEditPage();
+        updateTimerElement(timerNum, timerLabel, currentTime);
+        
+        var url = '/timer/' + timerId;
+        var timerData = {
+            "label": timerLabel,
+            "start": startTime,
+            "current": currentTime,
+            "id": timerId
+        }
+        callAjax("PUT", url, timerData, null);
     }
-    callAjax("PUT", url, timerData, getTimers);
+}
+
+function updateTimerElement(timerNum, timerLabel, currentTime) {
+    var timerList = document.getElementById('timer-list');
+    var timer = timerList.childNodes[timerNum];
+    timer.firstChild.nextSibling.firstChild.innerText = timerLabel;
+    timer.firstChild.nextSibling.lastChild.innerText = currentTime;
 }
 
 function showDeleteTimerPage(element) {
@@ -251,6 +270,7 @@ function showDeleteTimerPage(element) {
     document.getElementById('delete-start').value = element.parentElement.getAttribute('data-timer-start');
     document.getElementById('delete-current').value = element.nextSibling.lastChild.innerText;
     document.getElementById('delete-timer-id').value = element.parentElement.getAttribute('data-timer-id');
+    document.getElementById('delete-timer-num').value = element.parentElement.getAttribute('data-timer-num');
     document.getElementById('delete-timer-page').style.display = 'block';
 }
 
@@ -265,10 +285,17 @@ function hideDeleteTimerPage() {
 
 function deleteTimer() {
     var timerId = document.getElementById('delete-timer-id').value;
+    var timerNum = document.getElementById('delete-timer-num').value;
     hideDeleteTimerPage();
+    removeTimerFromList(timerNum);
     
     var url = '/timer/' + timerId;
-    callAjax("DELETE", url, null, getTimers);
+    callAjax("DELETE", url, null, null);
+}
+
+function removeTimerFromList(timerNum) {
+    var timerList = document.getElementById('timer-list');
+    timerList.removeChild(timerList.childNodes[timerNum]);
 }
 
 function buildTimerList(response) {

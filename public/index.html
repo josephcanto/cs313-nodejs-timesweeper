@@ -70,10 +70,12 @@
             </form>
         </div>
         <div id='edit-timer-page'>
+            <p id='incorrect-format-notice'>Please enter a time in the format hh:mm:ss</p>
             <form>
                 <input type='text' id='edit-label' placeholder='Enter label' required>
-                <input type='text' id='edit-start' placeholder='Enter start time' required>
-                <input type='text' id='edit-current' placeholder='Enter current time' required>
+                <!-- <input type='text' id='edit-start' placeholder='Enter start time' required> -->
+                <input type='text' id='edit-current' placeholder='Enter a new time (i.e. 05:02:01)' required>
+                <input type='hidden' id='edit-timer-num'>
                 <input type='hidden' id='timer-id'>
                 <button type='button' onclick='editTimer()'>Submit Changes</button>
             </form>
@@ -81,9 +83,10 @@
         <div id='delete-timer-page'>
             <form>
                 <input type='text' id='delete-label' disabled>
-                <input type='text' id='delete-start' disabled>
+                <!-- <input type='text' id='delete-start' disabled> -->
                 <input type='text' id='delete-current' disabled>
                 <input type='hidden' id='delete-timer-id'>
+                <input type='hidden' id='delete-timer-num'>
                 <button type='button' onclick='deleteTimer()'>Confirm Deletion</button>
             </form>
         </div>

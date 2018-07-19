@@ -121,11 +121,16 @@ a:active {
     color: white;
 }
 
-#notice, #message, #limit-exceeded-notice {
+#notice, 
+#message, 
+#limit-exceeded-notice
+#incorrect-format-notice {
     width: 75%;
     margin: 15px auto -25px auto;
 }
-#limit-exceeded-notice {
+
+#limit-exceeded-notice,
+#incorrect-format-notice {
     display: none;
 }
 /* End user pages */
