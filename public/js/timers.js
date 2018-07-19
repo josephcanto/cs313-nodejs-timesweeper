@@ -267,7 +267,7 @@ function showDeleteTimerPage(element) {
     document.getElementById('app-title').innerText = 'Delete Timer';
     document.getElementById('add-new-link').style.visibility = 'hidden';
     document.getElementById('delete-label').value = element.nextSibling.firstChild.innerText;
-    document.getElementById('delete-start').value = element.parentElement.getAttribute('data-timer-start');
+    // document.getElementById('delete-start').value = element.parentElement.getAttribute('data-timer-start');
     document.getElementById('delete-current').value = element.nextSibling.lastChild.innerText;
     document.getElementById('delete-timer-id').value = element.parentElement.getAttribute('data-timer-id');
     document.getElementById('delete-timer-num').value = element.parentElement.getAttribute('data-timer-num');
