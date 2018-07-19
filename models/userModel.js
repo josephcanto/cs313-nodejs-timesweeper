@@ -19,10 +19,12 @@ function validateLogin(res, callback, username, password) {
                 console.log("User credentials match. Logging in user" + username + "...");
                 callback(null, username, res);
             } else {
-                callback("Invalid username or password.", null, res);
+                res.json({success: false, message: "Invalid username or password."});
+                return;
             }
         } else {
             res.json({success: false, message: "Invalid username or password."});
+            return;
         }
     });
 }
@@ -31,7 +33,6 @@ function getUserId(err, username, res) {
     if(err) {
         console.log("Error logging in:", err);
         res.json({success: false});
-        return;
     }
     console.log("Getting ID from DB for user with username " + username + "...");
 
