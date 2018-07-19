@@ -295,7 +295,13 @@ function deleteTimer() {
 
 function removeTimerFromList(timerNum) {
     var timerList = document.getElementById('timer-list');
-    timerList.removeChild(timerList.childNodes[timerNum]);
+    var timers = document.getElementsByClassName('timer');
+    for(var i = 0; i < timers.length; i++) {
+        console.log(timers[i].getAttribute('data-timer-num'));
+        if(timers[i].getAttribute('data-timer-num') == timerNum) {
+            timerList.removeChild(timers[i]);
+        }
+    }
 }
 
 function buildTimerList(response) {
