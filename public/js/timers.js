@@ -140,26 +140,38 @@ function hideCreateTimerPage() {
 
 function createTimer() {
     var timerLabel = document.getElementById('new-label').value;
-    var startTime = document.getElementById('new-start').value;
-    var currentTime;
-    if(document.getElementById('timer-type').value == 'Stopwatch') {
-        currentTime = startTime;
-    }
-    console.log("Timer label:", timerLabel, "Start time:", startTime, "Current time:", currentTime);
-    document.getElementById('type-placeholder').hidden = false;
-    document.getElementById('timer-type').selectedIndex = 0;
-    document.getElementById('new-label').value = '';
-    document.getElementById('new-start').value = '';
-
-    hideCreateTimerPage();
+    if(!timerLabel) {
+        document.getElementById('limit-exceeded-notice').innerText = 'Please enter a label.';
+        document.getElementById('limit-exceeded-notice').style.display = 'block';
+    } else {
+        if(document.getElementById('limit-exceeded-notice').style.display == 'block') {
+            document.getElementById('limit-exceeded-notice').style.display = 'none';
+            document.getElementById('limit-exceeded-notice').innerText = 'Sorry, but you can only create up to 6 timers.';
+        }
+        // var startTime = document.getElementById('new-start').value;
+        var startTime = '00:00:00';
+        var currentTime = '00:00:00';
+        // if(document.getElementById('timer-type').value == 'Stopwatch') {
+        //     currentTime = '00:00:00';
+        // } else {
+        //     currentTime = startTime;
+        // }
+        console.log("Timer label:", timerLabel, "Start time:", startTime, "Current time:", currentTime);
+        // document.getElementById('type-placeholder').hidden = false;
+        // document.getElementById('timer-type').selectedIndex = 0;
+        document.getElementById('new-label').value = '';
+        // document.getElementById('new-start').value = '';
     
-    var url = '/timer';
-    var timerData = {
-        "label": timerLabel,
-        "start": startTime,
-        "current": currentTime
+        hideCreateTimerPage();
+        
+        var url = '/timer';
+        var timerData = {
+            "label": timerLabel,
+            "start": startTime,
+            "current": currentTime
+        }
+        callAjax("POST", url, timerData, getTimers);
     }
-    callAjax("POST", url, timerData, getTimers);
 }
 
 function getTimers(response) {

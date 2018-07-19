@@ -59,13 +59,13 @@
         <div id='create-timer-page'>
             <p id='limit-exceeded-notice'>Sorry, but you can only create up to 6 timers.</p>
             <form id='create-timer-form'>
-                <select id='timer-type' onclick='document.getElementById("type-placeholder").setAttribute("hidden", "true")' required>
+                <!-- <select id='timer-type' onclick='document.getElementById("type-placeholder").setAttribute("hidden", "true")' required>
                     <option id='type-placeholder' disabled selected>Choose Timer Type</option>
                     <option>Stopwatch</option>
                     <option disabled>Countdown (coming soon)</option>
-                </select>
-                <input type='text' id='new-label' placeholder='Enter label' required>
-                <input type='text' id='new-start' placeholder='Enter start time' required>
+                </select> -->
+                <input type='text' id='new-label' maxlength='10' placeholder='Enter label' required>
+                <!-- <input type='text' id='new-start' placeholder='Enter start time' required> -->
                 <button type='button' onclick='createTimer()'>Create Timer</button>
             </form>
         </div>
