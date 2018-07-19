@@ -31,6 +31,7 @@ function getUserId(err, username, res) {
     if(err) {
         console.log("Error logging in:", err);
         res.json({success: false});
+        return;
     }
     console.log("Getting ID from DB for user with username " + username + "...");
 
