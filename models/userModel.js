@@ -13,7 +13,7 @@ function validateLogin(res, callback, username, password) {
             res.json({success: false});
         }
 
-        console.log("Back from db with result:", result);
+        // console.log("Back from db with result:", result);
         if(result.rowCount > 0) {
             if(result.rows[0].username == username && result.rows[0].password == password) {
                 console.log("User credentials match. Logging in user" + username + "...");
@@ -42,7 +42,7 @@ function getUserId(err, username, res) {
             console.log("Error in query:", err);
             res.json({success: false});
         }
-        console.log("Back from db with result:", result);
+        // console.log("Back from db with result:", result);
         res.json({success: true, data: result.rows[0].id});
     });
 }

@@ -21,17 +21,18 @@ function addTimerToDb(label, start, current, user_id, callback) {
 }
 
 function getTimersFromDb(user_id, callback) {
-    console.log("Getting timers from DB for user with ID " + user_id + "...");
+    console.log("Getting timers from DB for user with id " + user_id + "...");
 
     var sql = 'SELECT id, label, "start", "current" FROM timers WHERE user_id = $1';
     var params = [user_id];
     
     pool.query(sql, params, (err, result) => {
         if(err) {
-            console.log("Error retrieving list of timers for user with ID " + user_id + ": " + err);
+            console.log("Error retrieving list of timers for user with id " + user_id + ": " + err);
             return callback(err, null);
         }
-        console.log("Found the following timers for user with ID " + user_id + ": " + JSON.stringify(result.rows));
+        // console.log("Found the following timers for user with id " + user_id + ": " + JSON.stringify(result.rows));
+        console.log("Successfully retrieved timers.");
         return callback(null, result.rows);
     });
 }

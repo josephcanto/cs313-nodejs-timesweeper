@@ -57,7 +57,8 @@
         <div id='edit-user-page'>Edit User Info Page</div>
         <div id='settings-page'>Settings Page</div>
         <div id='create-timer-page'>
-            <form>
+            <p id='limit-exceeded-notice'>Sorry, but you can only create up to 6 timers.</p>
+            <form id='create-timer-form'>
                 <select id='timer-type' onclick='document.getElementById("type-placeholder").setAttribute("hidden", "true")' required>
                     <option id='type-placeholder' disabled selected>Choose Timer Type</option>
                     <option>Stopwatch</option>

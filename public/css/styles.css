@@ -121,9 +121,12 @@ a:active {
     color: white;
 }
 
-#notice, #message {
+#notice, #message, #limit-exceeded-notice {
     width: 75%;
     margin: 15px auto -25px auto;
+}
+#limit-exceeded-notice {
+    display: none;
 }
 /* End user pages */
 
