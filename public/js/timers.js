@@ -1,4 +1,3 @@
-// The function below was borrowed from: https://stackoverflow.com/questions/8567114/how-to-make-an-ajax-call-without-jquery
 function callAjax(action, url, data, callback) {
     var xmlhttp;
     xmlhttp = new XMLHttpRequest();
